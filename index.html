@@ -2,14 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel Birthday Party Room 🎂</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -38,10 +34,10 @@
                 <div class="curtain curtain-r"></div>
             </div>
 
-            <!-- Left Wall Props (Tripod Camera) -->
+            <!-- Left Wall Props (Radio/Speaker & Frame) -->
             <div class="wall-left">
                 <div class="pixel-frame">🖼️</div>
-                <div class="retro-camera">📸</div>
+                <div class="retro-speaker">📻</div>
             </div>
 
             <!-- Right Wall Shelf -->
@@ -49,31 +45,31 @@
                 <div class="shelf">🪴 🫙</div>
             </div>
 
-            <!-- Floating Balloons -->
-            <div class="balloon b-1">🎈</div>
-            <div class="balloon b-2">💖</div>
-            <div class="balloon b-3">🎈</div>
-            <div class="balloon b-4">🎈</div>
-
-            <!-- Stacks of Interactive Presents (Left Floor) -->
-            <div class="gift-stack gift-stack-left" id="gifts-left-container">
-                <!-- Injected via JavaScript/Firebase -->
-            </div>
+            <!-- Pixel Balloons -->
+            <div class="balloon b-pink">🎈</div>
+            <div class="balloon b-orange">🎈</div>
+            <div class="balloon b-purple">🎈</div>
+            <div class="balloon b-blue">🎈</div>
+            <div class="balloon b-green">🎈</div>
 
             <!-- Carpet & Center Table Setup -->
             <div class="blue-rug">
-                <!-- Side/Back Chairs -->
+                <!-- Side Chairs -->
                 <div class="chair chair-l">🪑</div>
                 <div class="chair chair-r">🪑</div>
 
-                <!-- Dining Table with Gingham Tablecloth -->
+                <!-- Dining Table with Pink Gingham Tablecloth -->
                 <div class="table">
                     <div class="table-feast">
                         <span class="cupcakes">🧁</span>
                         
                         <!-- Interactive Birthday Cake -->
-                        <div class="cake" id="cake-trigger">
-                            <div class="candles" id="candles-flame">🔥 🔥 🔥</div>
+                        <div class="cake" id="cake-trigger" title="Click to blow out candles!">
+                            <div class="candles" id="candles-container">
+                                <span class="flame">🔥</span>
+                                <span class="flame">🔥</span>
+                                <span class="flame">🔥</span>
+                            </div>
                             <div class="cake-body">🎂</div>
                         </div>
 
@@ -82,26 +78,29 @@
                     </div>
                 </div>
 
-                <!-- Front Chairs with Bows -->
+                <!-- Front Chairs with Pink Bows/Hearts -->
                 <div class="chair chair-f1">🎀</div>
                 <div class="chair chair-f2">🎀</div>
 
-                <!-- Pixel Orange Cat -->
+                <!-- Pixel Orange/Cream Cat -->
                 <div class="cat">🐈</div>
             </div>
 
-            <!-- Stacks of Interactive Presents (Right Floor) -->
-            <div class="gift-stack gift-stack-right" id="gifts-right-container">
-                <!-- Injected via JavaScript/Firebase -->
-            </div>
+            <!-- Left Floor Present Stack -->
+            <div class="gift-stack gift-stack-left" id="gifts-left-container"></div>
+
+            <!-- Right Floor Present Stack -->
+            <div class="gift-stack gift-stack-right" id="gifts-right-container"></div>
             
-            <!-- Floating "Leave a Present" Button -->
+            <!-- Action Button to Leave Presents -->
             <button id="add-gift-btn" class="pixel-btn leave-gift-btn">🎁 LEAVE A PRESENT</button>
         </div>
     </div>
 
-    <!-- Minimal Audio Controls -->
-    <button id="audio-btn" class="pixel-btn audio-toggle">🎵</button>
+    <!-- Microphone Prompt Status Banner -->
+    <div id="mic-status-bar" class="mic-status">
+        🎤 Click the <strong>Birthday Cake</strong> to enable microphone blow-out detection!
+    </div>
 
     <!-- ========================================== -->
     <!-- MODAL 1: VIEW PRESENT (Matches Image 3)    -->
@@ -158,11 +157,11 @@
                 <button class="wrap-option" data-style="wrap-black-white" data-name="MONOCHROME">🎁</button>
             </div>
 
-            <!-- Inputs for Letter & Photo -->
+            <!-- Inputs for Message & Photo -->
             <div class="present-form-inputs">
                 <input type="text" id="input-sender" placeholder="Your Name" maxlength="20" />
                 <textarea id="input-message" placeholder="Write your birthday letter..." rows="3"></textarea>
-                <input type="url" id="input-photo-url" placeholder="Photo URL (optional)" />
+                <input type="url" id="input-photo-url" placeholder="Photo URL (e.g. image link)" />
             </div>
 
             <div class="station-actions">
@@ -172,23 +171,6 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL 3: CAKE & CANDLE BLOWING              -->
-    <!-- ========================================== -->
-    <div id="cake-modal" class="pixel-modal hidden">
-        <div class="simple-pixel-dialog">
-            <h3>Make a wish... 🎂</h3>
-            <p id="cake-mic-status">Blow into your microphone or press the button below!</p>
-            <div class="dialog-buttons">
-                <button id="blow-candles-btn" class="pixel-btn highlight-btn">BLOW OUT CANDLES 🕯️</button>
-                <button id="close-cake-btn" class="pixel-btn">CANCEL</button>
-            </div>
-        </div>
-    </div>
-
-    <audio id="bg-music" loop src="assets/music/cozy_pixel_birthday.mp3"></audio>
-
-    <script src="firebase-config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
