@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zash's 28th Birthday Feast! ⚡</title>
+    <title>Harry Potter Birthday Asset Pack & Scene - Zash ⚡</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Outer Floating Balloons -->
-    <div id="bg-balloons-container"></div>
-
-    <!-- Outer Brown Frame (Exact Image Style) -->
+    <!-- Outer Frame (Exact Match with Image) -->
     <div id="outer-frame">
         <div class="top-subtitle">Zash's 28th birthday!</div>
         
         <div id="game-viewport">
             <canvas id="room-canvas" width="640" height="380"></canvas>
             
+            <button id="mode-toggle-btn" class="pixel-btn mode-btn">🔍 TOGGLE ASSET PACK / SCENE</button>
             <button id="add-gift-btn" class="pixel-btn leave-gift-btn">🎁 LEAVE A PRESENT</button>
         </div>
 
@@ -26,12 +24,12 @@
         <div class="bottom-subtitle">ZASH'S 28TH BIRTHDAY FEAST!</div>
     </div>
 
-    <!-- Interactive Status -->
+    <!-- Interactive Hint Bar -->
     <div id="mic-status-bar" class="mic-status">
-        🎈 Pop balloons! 🎤 Click cake to enable mic & blow out candles!
+        ⚡ Click cake to blow out candles! Click balloons to pop!
     </div>
 
-    <!-- Present View Modal -->
+    <!-- View Present Modal -->
     <div id="view-present-modal" class="pixel-modal hidden">
         <div class="present-card-container">
             <div class="card-header-pink">
@@ -63,29 +61,17 @@
         <div class="wrapping-station-box">
             <div class="station-header">
                 <h3>PICK THE WRAPPING</h3>
-                <span class="step-text">MAGICAL PRESENT</span>
-            </div>
-
-            <div class="preview-present-display">
-                <div id="wrap-preview-icon" class="big-gift-preview">🎁</div>
-                <div id="wrap-selected-name" class="wrap-name-label">PARCHMENT & RED RIBBON</div>
-            </div>
-
-            <div class="wrap-options-grid">
-                <button class="wrap-option active" data-color="#d4a373" data-ribbon="#800020" data-name="PARCHMENT RED">🎁</button>
-                <button class="wrap-option" data-color="#2a9d8f" data-ribbon="#e9c46a" data-name="SLYTHERIN TEAL">🎁</button>
-                <button class="wrap-option" data-color="#e63946" data-ribbon="#ffffff" data-name="CLASSIC RED">🎁</button>
-                <button class="wrap-option" data-color="#1d3557" data-ribbon="#f4a261" data-name="RAVENCLAW BLUE">🎁</button>
+                <span class="step-text">HOGWARTS SPECIAL PRESENT</span>
             </div>
 
             <div class="present-form-inputs">
                 <input type="text" id="input-sender" placeholder="Your Name" maxlength="20" />
                 <textarea id="input-message" placeholder="Write message for Zash..." rows="3"></textarea>
-                <input type="url" id="input-photo-url" placeholder="Photo URL" />
+                <input type="url" id="input-photo-url" placeholder="Photo URL (Optional)" />
             </div>
 
             <div class="station-actions">
-                <button id="cancel-wrap-btn" class="pixel-btn">BACK</button>
+                <button id="cancel-wrap-btn" class="pixel-btn">CANCEL</button>
                 <button id="submit-wrap-btn" class="pixel-btn highlight-btn">SEND GIFT 🦉</button>
             </div>
         </div>
