@@ -1,219 +1,169 @@
-// ==========================================
-// 1. EASY EDITABLE MESSAGES CONFIG
-// ==========================================
-const gifts = [
-    { message: "MESSAGE 1: Wishing you a day full of warmth, laughter, and your favorite treats! Happy Birthday!" },
-    { message: "MESSAGE 2: May this coming year bring you closer to all your dreams and quiet wishes." },
-    { message: "MESSAGE 3: Thank you for being such an awesome person. Enjoy your special day!" },
-    { message: "MESSAGE 4: Here's a little digital hug and a giant slice of virtual cake for you!" },
-    { message: "MESSAGE 5: Hope your birthday is as wonderfully unique and cozy as you are!" }
+// Default seed presents if database is empty
+const defaultPresents = [
+    {
+        sender: "Rebekah",
+        message: "You better have a good day!",
+        photoUrl: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=300",
+        style: "wrap-pink-hearts"
+    },
+    {
+        sender: "Alex",
+        message: "Happy Birthday! So glad we get to celebrate with you!",
+        photoUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=300",
+        style: "wrap-blue-squares"
+    }
 ];
 
-// State tracking
-let audioContext = null;
-let micStream = null;
-let analyser = null;
-let isAudioPlaying = false;
-let candlesBlown = false;
+let loadedPresents = [];
+let selectedWrapStyle = "wrap-pink-hearts";
+let selectedWrapName = "PINK HEARTS";
 
-// ==========================================
-// 2. INITIALIZATION & FIREBASE INTEGRATION
-// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    setupGifts();
-    setupCakeInteraction();
-    setupAudioToggle();
-    loadFirebaseState();
+    initApp();
+    setupListeners();
 });
 
-// Load opened state from Firebase if configured
-function loadFirebaseState() {
-    if (window.db) {
-        window.db.collection("party_state").doc("room").get().then((doc) => {
-            if (doc.exists) {
-                const data = doc.data();
-                if (data.openedGifts) {
-                    data.openedGifts.forEach(index => markGiftOpened(index, false));
-                }
-                if (data.candlesBlown) {
-                    extinguishCandles(false);
-                }
-            }
-        }).catch(err => console.log("Firebase sync fallback:", err));
-    }
+function initApp() {
+    fetchPresentsFromFirebase();
 }
 
-function saveGiftState(giftIndex) {
+function fetchPresentsFromFirebase() {
     if (window.db) {
-        window.db.collection("party_state").doc("room").set({
-            openedGifts: firebase.firestore.FieldValue.arrayUnion(giftIndex)
-        }, { merge: true });
-    }
-}
-
-function saveCandleState() {
-    if (window.db) {
-        window.db.collection("party_state").doc("room").set({
-            candlesBlown: true
-        }, { merge: true });
-    }
-}
-
-// ==========================================
-// 3. GIFT INTERACTION & ANIMATIONS
-// ==========================================
-function setupGifts() {
-    const giftElements = document.querySelectorAll(".gift-box");
-    
-    giftElements.forEach(el => {
-        el.addEventListener("click", () => {
-            const index = parseInt(el.getAttribute("data-index"));
-            triggerFirstAudio();
-            
-            // Shake Animation
-            el.classList.add("shaking");
-            setTimeout(() => {
-                el.classList.remove("shaking");
-                markGiftOpened(index, true);
-                openMessageModal(gifts[index] ? gifts[index].message : "Happy Birthday!");
-            }, 400);
+        window.db.collection("presents").onSnapshot(snapshot => {
+            loadedPresents = [];
+            snapshot.forEach(doc => loadedPresents.push(doc.data()));
+            if (loadedPresents.length === 0) loadedPresents = defaultPresents;
+            renderPresentsInRoom();
+        }, () => {
+            loadedPresents = defaultPresents;
+            renderPresentsInRoom();
         });
-    });
-
-    document.getElementById("close-message-btn").addEventListener("click", () => {
-        document.getElementById("message-modal").classList.add("hidden");
-    });
-}
-
-function markGiftOpened(index, isNewOpen) {
-    const giftEl = document.querySelector(`.gift-box[data-index="${index}"]`);
-    if (giftEl) {
-        giftEl.classList.add("opened");
-        if (isNewOpen) {
-            saveGiftState(index);
-        }
+    } else {
+        loadedPresents = defaultPresents;
+        renderPresentsInRoom();
     }
 }
 
-function openMessageModal(text) {
-    const modal = document.getElementById("message-modal");
-    document.getElementById("modal-text").innerText = text;
-    modal.classList.remove("hidden");
+function renderPresentsInRoom() {
+    const leftContainer = document.getElementById("gifts-left-container");
+    const rightContainer = document.getElementById("gifts-right-container");
+    
+    leftContainer.innerHTML = "";
+    rightContainer.innerHTML = "";
+
+    loadedPresents.forEach((gift, index) => {
+        const giftEl = document.createElement("div");
+        giftEl.className = `gift-item ${gift.style || 'wrap-pink-hearts'}`;
+        giftEl.innerText = "🎁";
+        giftEl.onclick = () => openPresentModal(gift);
+
+        if (index % 2 === 0) {
+            leftContainer.appendChild(giftEl);
+        } else {
+            rightContainer.appendChild(giftEl);
+        }
+    });
 }
 
-// ==========================================
-// 4. CAKE & MICROPHONE CANDLE BLOWING
-// ==========================================
-function setupCakeInteraction() {
-    const cakeTrigger = document.getElementById("cake-trigger");
-    const cakeModal = document.getElementById("cake-modal");
-    const manualBtn = document.getElementById("manual-blow-btn");
-    const cancelBtn = document.getElementById("close-cake-btn");
+function openPresentModal(gift) {
+    document.getElementById("card-sender-name").innerText = gift.sender || "Anonymous";
+    document.getElementById("card-letter-text").innerText = gift.message || "Happy Birthday!";
+    
+    const photoImg = document.getElementById("card-photo-img");
+    if (gift.photoUrl) {
+        photoImg.src = gift.photoUrl;
+        photoImg.parentElement.style.display = "block";
+    } else {
+        photoImg.parentElement.style.display = "none";
+    }
 
-    cakeTrigger.addEventListener("click", () => {
-        triggerFirstAudio();
-        if (candlesBlown) {
-            openMessageModal("✨ Wish made! Happy Birthday! 🎂");
+    document.getElementById("view-present-modal").classList.remove("hidden");
+}
+
+function setupListeners() {
+    // Close View Present Modal
+    document.getElementById("close-view-btn").onclick = () => {
+        document.getElementById("view-present-modal").classList.add("hidden");
+    };
+    document.getElementById("close-card-btn").onclick = () => {
+        document.getElementById("view-present-modal").classList.add("hidden");
+    };
+
+    // Open Leave Present Wrapping Station
+    document.getElementById("add-gift-btn").onclick = () => {
+        document.getElementById("create-present-modal").classList.remove("hidden");
+    };
+    document.getElementById("cancel-wrap-btn").onclick = () => {
+        document.getElementById("create-present-modal").classList.add("hidden");
+    };
+
+    // Select Wrapping Option (Image 2)
+    document.querySelectorAll(".wrap-option").forEach(opt => {
+        opt.onclick = (e) => {
+            document.querySelectorAll(".wrap-option").forEach(o => o.classList.remove("active"));
+            e.currentTarget.classList.add("active");
+            selectedWrapStyle = e.currentTarget.dataset.style;
+            selectedWrapName = e.currentTarget.dataset.name;
+            
+            document.getElementById("wrap-selected-name").innerText = selectedWrapName;
+            document.getElementById("wrap-preview-icon").className = `big-gift-preview ${selectedWrapStyle}`;
+        };
+    });
+
+    // Submit New Present
+    document.getElementById("submit-wrap-btn").onclick = () => {
+        const sender = document.getElementById("input-sender").value.trim();
+        const message = document.getElementById("input-message").value.trim();
+        const photoUrl = document.getElementById("input-photo-url").value.trim();
+
+        if (!message) {
+            alert("Please write a message for your present!");
             return;
         }
-        cakeModal.classList.remove("hidden");
-        initMicrophoneDetection();
-    });
 
-    manualBtn.addEventListener("click", () => {
-        extinguishCandles(true);
-        cakeModal.classList.add("hidden");
-    });
+        const newGift = {
+            sender: sender || "A Friend",
+            message: message,
+            photoUrl: photoUrl || "",
+            style: selectedWrapStyle,
+            createdAt: new Date().toISOString()
+        };
 
-    cancelBtn.addEventListener("click", () => {
-        stopMicrophone();
-        cakeModal.classList.add("hidden");
-    });
-}
-
-async function initMicrophoneDetection() {
-    try {
-        micStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        analyser = audioContext.createAnalyser();
-        const source = audioContext.createMediaStreamSource(micStream);
-        
-        analyser.fftSize = 256;
-        source.connect(analyser);
-
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        
-        function checkBlowing() {
-            if (candlesBlown || !micStream) return;
-            
-            analyser.getByteFrequencyData(dataArray);
-            let sum = 0;
-            for (let i = 0; i < dataArray.length; i++) {
-                sum += dataArray[i];
-            }
-            let average = sum / dataArray.length;
-
-            // Blow volume threshold
-            if (average > 65) {
-                extinguishCandles(true);
-                document.getElementById("cake-modal").classList.add("hidden");
-                stopMicrophone();
-                return;
-            }
-            requestAnimationFrame(checkBlowing);
-        }
-        checkBlowing();
-
-    } catch (err) {
-        document.getElementById("mic-status-text").innerText = "Click below to blow out your candles!";
-    }
-}
-
-function stopMicrophone() {
-    if (micStream) {
-        micStream.getTracks().forEach(track => track.stop());
-        micStream = null;
-    }
-}
-
-function extinguishCandles(save) {
-    candlesBlown = true;
-    const candlesContainer = document.getElementById("candles");
-    candlesContainer.innerHTML = "<span style='font-size:10px;'>💨</span>";
-    
-    if (save) {
-        saveCandleState();
-        openMessageModal("✨ Wish made! Happy Birthday! 🎂");
-    }
-}
-
-// ==========================================
-// 5. AUDIO SYSTEM
-// ==========================================
-function setupAudioToggle() {
-    const audioBtn = document.getElementById("audio-toggle");
-    const bgMusic = document.getElementById("bg-music");
-
-    audioBtn.addEventListener("click", () => {
-        if (isAudioPlaying) {
-            bgMusic.pause();
-            audioBtn.innerText = "🔇";
-            isAudioPlaying = false;
+        if (window.db) {
+            window.db.collection("presents").add(newGift);
         } else {
-            bgMusic.play().then(() => {
-                audioBtn.innerText = "🎵";
-                isAudioPlaying = true;
-            }).catch(() => {});
+            loadedPresents.push(newGift);
+            renderPresentsInRoom();
         }
-    });
-}
 
-function triggerFirstAudio() {
-    const bgMusic = document.getElementById("bg-music");
-    if (!isAudioPlaying) {
-        bgMusic.play().then(() => {
-            isAudioPlaying = true;
-            document.getElementById("audio-toggle").innerText = "🎵";
-        }).catch(() => {});
-    }
+        document.getElementById("create-present-modal").classList.add("hidden");
+        // Clear fields
+        document.getElementById("input-sender").value = "";
+        document.getElementById("input-message").value = "";
+        document.getElementById("input-photo-url").value = "";
+    };
+
+    // Cake & Candles Interaction
+    document.getElementById("cake-trigger").onclick = () => {
+        document.getElementById("cake-modal").classList.remove("hidden");
+    };
+    document.getElementById("close-cake-btn").onclick = () => {
+        document.getElementById("cake-modal").classList.add("hidden");
+    };
+    document.getElementById("blow-candles-btn").onclick = () => {
+        document.getElementById("candles-flame").innerText = "💨";
+        document.getElementById("cake-modal").classList.add("hidden");
+    };
+
+    // Audio Toggle
+    document.getElementById("audio-btn").onclick = () => {
+        const music = document.getElementById("bg-music");
+        if (music.paused) {
+            music.play();
+            document.getElementById("audio-btn").innerText = "🎵";
+        } else {
+            music.pause();
+            document.getElementById("audio-btn").innerText = "🔇";
+        }
+    };
 }
