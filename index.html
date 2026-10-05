@@ -2,48 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozy Digital Birthday Party Room 🎂</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday! 🎂</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    
+    <!-- Firebase App & Firestore (v9 Compat Mode) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <div id="game-view">
-        <!-- Room Scene Layer -->
-        <div id="room">
-            <!-- Ceilings & Garlands -->
-            <div class="rafters"></div>
-            <div class="garland"></div>
-            <div class="star-lights"></div>
 
-            <!-- Banner -->
-            <div class="banner-wrapper">
-                <div class="bday-banner">HAPPY BIRTHDAY!</div>
+    <!-- Main Fixed Pixel Room Viewport -->
+    <div id="room-container">
+        <div id="room">
+            
+            <!-- Ceiling Rafters & String Lights -->
+            <div class="rafters"></div>
+            <div class="garland-left"></div>
+            <div class="garland-right"></div>
+            <div class="star-lights">
+                <span class="star-light s1">★</span>
+                <span class="star-light s2">★</span>
+                <span class="star-light s3">★</span>
+                <span class="star-light s4">★</span>
             </div>
 
-            <!-- Window -->
-            <div class="window">
+            <!-- Arched Happy Birthday Banner -->
+            <div class="banner-container">
+                <div class="bday-banner">
+                    <span>H</span><span>A</span><span>P</span><span>P</span><span>Y</span>
+                    &nbsp;
+                    <span>B</span><span>I</span><span>R</span><span>T</span><span>H</span><span>D</span><span>A</span><span>Y</span><span>!</span>
+                </div>
+            </div>
+
+            <!-- Center Night Sky Window -->
+            <div class="window-frame">
                 <div class="night-sky">
                     <div class="moon">🌙</div>
-                    <div class="stars"></div>
+                    <div class="pixel-star st1">✦</div>
+                    <div class="pixel-star st2">✦</div>
+                    <div class="pixel-star st3">✦</div>
+                    <div class="city-lights"></div>
                 </div>
                 <div class="curtain curtain-left"></div>
                 <div class="curtain curtain-right"></div>
             </div>
 
-            <!-- Left Wall Decor -->
+            <!-- Left Wall Decor & Tripod Camera -->
             <div class="wall-decor-left">
-                <div class="framed-photo photo-1" id="photo1">🖼️</div>
-                <div class="framed-photo photo-2" id="photo2">🖼️</div>
-                <div class="photo-booth" id="camera">
-                    <div class="booth-top">📸</div>
+                <div class="pixel-frame f1">🖼️</div>
+                <div class="pixel-frame f2">🖼️</div>
+                <div class="photo-booth">
+                    <div class="camera-body">📷</div>
                     <div class="tripod-legs"></div>
                 </div>
             </div>
 
-            <!-- Right Wall Decor -->
+            <!-- Right Wall Shelf -->
             <div class="wall-decor-right">
                 <div class="shelf">
                     <span class="plant">🪴</span>
@@ -51,100 +68,116 @@
                 </div>
             </div>
 
-            <!-- Floating Balloons -->
-            <div class="balloon balloon-1" data-id="0">🎈</div>
-            <div class="balloon balloon-2" data-id="1">💖</div>
-            <div class="balloon balloon-3" data-id="2">🎈</div>
-            <div class="balloon balloon-4" data-id="3">🎈</div>
-            <div class="balloon balloon-5" data-id="4">💖</div>
+            <!-- Floating Room Balloons -->
+            <div class="balloon balloon-pink">🎈</div>
+            <div class="balloon balloon-yellow">🎈</div>
+            <div class="balloon balloon-purple">🎈</div>
+            <div class="balloon balloon-heart">💖</div>
+            <div class="balloon balloon-green">🎈</div>
 
-            <!-- Blue Rug & Table Centerpiece -->
-            <div class="carpet">
-                <!-- Side Chairs -->
-                <div class="chair chair-left">🪑</div>
-                <div class="chair chair-right">🪑</div>
+            <!-- Stacks of Gifts (Left Floor) -->
+            <div class="gifts-left">
+                <div class="gift-box gift-0" data-index="0">
+                    <div class="gift-lid"></div>
+                    <div class="gift-body">🎁</div>
+                </div>
+                <div class="gift-box gift-1" data-index="1">
+                    <div class="gift-lid"></div>
+                    <div class="gift-body">🎁</div>
+                </div>
+            </div>
 
-                <!-- Main Table -->
-                <div class="table">
-                    <!-- Table Feast -->
-                    <div class="table-feast">
-                        <span class="cupcakes">🧁</span>
-                        <div class="cake" id="cake">
-                            <div class="candles" id="candles">🕯️🕯️🕯️</div>
-                            <div class="cake-body">🎂</div>
+            <!-- Blue Rug & Central Banquet Table -->
+            <div class="blue-carpet">
+                
+                <!-- Rear Chairs -->
+                <div class="chair chair-back-left">🪑</div>
+                <div class="chair chair-back-right">🪑</div>
+
+                <!-- Dining Table -->
+                <div class="dining-table">
+                    <div class="table-items">
+                        <div class="dessert-tier">🧁</div>
+                        
+                        <!-- Interative Birthday Cake -->
+                        <div class="cake-wrapper" id="cake-trigger">
+                            <div class="candles-container" id="candles">
+                                <span class="flame f-1">🔥</span>
+                                <span class="flame f-2">🔥</span>
+                                <span class="flame f-3">🔥</span>
+                            </div>
+                            <div class="cake-graphic">🎂</div>
                         </div>
-                        <span class="flowers">🌸</span>
-                        <span class="drinks">🍹</span>
+
+                        <div class="flower-vase">💐</div>
+                        <div class="drinks">🍹</div>
                     </div>
                 </div>
 
-                <!-- Front Chairs -->
-                <div class="chair chair-front-1">🎀</div>
-                <div class="chair chair-front-2">🎀</div>
+                <!-- Front Chairs with Pink Bows -->
+                <div class="chair chair-front-left">🎀</div>
+                <div class="chair chair-front-right">🎀</div>
 
-                <!-- Pixel Pet -->
-                <div class="pixel-pet" id="pet">🐈</div>
+                <!-- Orange Pixel Cat in Foreground -->
+                <div class="pixel-cat">🐈</div>
             </div>
 
-            <!-- Presents Stacks -->
-            <div class="presents-left">
-                <div class="gift gift-1" data-id="0">🎁</div>
-                <div class="gift gift-2" data-id="1">🎁</div>
+            <!-- Stacks of Gifts (Right Floor) -->
+            <div class="gifts-right">
+                <div class="gift-box gift-2" data-index="2">
+                    <div class="gift-lid"></div>
+                    <div class="gift-body">🎁</div>
+                </div>
+                <div class="gift-box gift-3" data-index="3">
+                    <div class="gift-lid"></div>
+                    <div class="gift-body">🎁</div>
+                </div>
+                <div class="gift-box gift-4" data-index="4">
+                    <div class="gift-lid"></div>
+                    <div class="gift-body">🎁</div>
+                </div>
             </div>
-            <div class="presents-right">
-                <div class="gift gift-3" data-id="2">🎁</div>
-                <div class="gift gift-4" data-id="3">🎁</div>
-                <div class="gift gift-5" data-id="4">🎁</div>
-                <div class="gift gift-6" data-id="5">🎁</div>
-            </div>
+
         </div>
+    </div>
 
-        <!-- Quest HUD -->
-        <div id="hud">
-            <div class="hud-item">🎁 GIFTS <span id="hud-gifts">0/6</span></div>
-            <div class="hud-item">🎈 BALLOONS <span id="hud-balloons">0/5</span></div>
-            <div class="hud-item">❤️ HEARTS <span id="hud-hearts">0/10</span></div>
-            <div class="hud-item">⭐ SECRETS <span id="hud-secrets">0/5</span></div>
-            <div class="hud-item">🎂 CAKE <span id="hud-cake">❌</span></div>
-            <button id="audio-toggle" class="pixel-btn">🔊 Sound ON</button>
-        </div>
+    <!-- Minimal Audio Toggle Button -->
+    <button id="audio-toggle" class="pixel-audio-btn" aria-label="Toggle Audio">🎵</button>
 
-        <!-- Modals & Overlays -->
-        <div id="intro-modal" class="modal-overlay">
-            <div class="pixel-box">
-                <div class="dialogue-header">🎂 PARTY TIME!</div>
-                <p>Welcome to your digital party room!</p>
-                <p class="sub-text">Explore gifts, pop balloons, pet the cat, and blow out your candles! 🎈</p>
-                <button id="start-btn" class="pixel-btn highlight-btn">START EXPLORING</button>
+    <!-- Message Modal Overlay (Gift Unboxing) -->
+    <div id="message-modal" class="pixel-modal hidden">
+        <div class="pixel-dialog">
+            <div class="pixel-dialog-header">
+                <span>💌 A little message for you</span>
             </div>
-        </div>
-
-        <div id="dialogue-modal" class="modal-overlay hidden">
-            <div class="pixel-box">
-                <div id="dialogue-title" class="dialogue-header">💌 Message</div>
-                <div id="dialogue-content" class="dialogue-body">Text here...</div>
-                <button id="dialogue-close" class="pixel-btn">CLOSE</button>
+            <div id="modal-text" class="pixel-dialog-body">
+                <!-- Message injected here -->
             </div>
+            <button id="close-message-btn" class="pixel-btn">CLOSE</button>
         </div>
+    </div>
 
-        <div id="cake-modal" class="modal-overlay hidden">
-            <div class="pixel-box">
-                <div class="dialogue-header">🎂 Make a Wish!</div>
-                <p>Blow into your microphone or click below to extinguish the candles!</p>
-                <button id="blow-btn" class="pixel-btn highlight-btn">BLOW OUT CANDLES 🕯️️</button>
-                <button id="cake-cancel-btn" class="pixel-btn">CANCEL</button>
+    <!-- Candle Blowing Modal Overlay -->
+    <div id="cake-modal" class="pixel-modal hidden">
+        <div class="pixel-dialog">
+            <div class="pixel-dialog-header">
+                <span id="cake-modal-title">Make a wish... 🎂</span>
             </div>
-        </div>
-
-        <div id="finale-modal" class="modal-overlay hidden">
-            <div class="pixel-box finale-box">
-                <div class="dialogue-header gold-text">🎉 BIRTHDAY QUEST COMPLETE! 🎉</div>
-                <h1 id="finale-greeting">🎂 HAPPY BIRTHDAY! 🎂</h1>
-                <div id="finale-message" class="dialogue-body final-body">...</div>
-                <button id="finale-replay-btn" class="pixel-btn highlight-btn">KEEP EXPLORING ROOM 🎈</button>
+            <div class="pixel-dialog-body">
+                <p id="mic-status-text">Blow into your microphone or press the button to extinguish the candles!</p>
+                <div id="blow-indicator" class="blow-bar-container hidden">
+                    <div id="blow-bar-fill" class="blow-bar-fill"></div>
+                </div>
+            </div>
+            <div class="pixel-dialog-footer">
+                <button id="manual-blow-btn" class="pixel-btn highlight-btn">BLOW OUT CANDLES 🕯️</button>
+                <button id="close-cake-btn" class="pixel-btn">CANCEL</button>
             </div>
         </div>
     </div>
+
+    <!-- Audio Elements -->
+    <audio id="bg-music" loop src="assets/music/cozy_pixel_birthday.mp3"></audio>
 
     <script src="firebase-config.js"></script>
     <script src="script.js"></script>
