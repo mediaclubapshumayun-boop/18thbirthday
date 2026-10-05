@@ -3,74 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozy Pixel Birthday Quest 🎂</title>
+    <title>Cozy Digital Birthday Party Room 🎂</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <div id="game-container">
-        <canvas id="roomCanvas" width="960" height="640"></canvas>
+    <div id="game-view">
+        <!-- Room Scene Layer -->
+        <div id="room">
+            <!-- Ceilings & Garlands -->
+            <div class="rafters"></div>
+            <div class="garland"></div>
+            <div class="star-lights"></div>
 
+            <!-- Banner -->
+            <div class="banner-wrapper">
+                <div class="bday-banner">HAPPY BIRTHDAY!</div>
+            </div>
+
+            <!-- Window -->
+            <div class="window">
+                <div class="night-sky">
+                    <div class="moon">🌙</div>
+                    <div class="stars"></div>
+                </div>
+                <div class="curtain curtain-left"></div>
+                <div class="curtain curtain-right"></div>
+            </div>
+
+            <!-- Left Wall Decor -->
+            <div class="wall-decor-left">
+                <div class="framed-photo photo-1" id="photo1">🖼️</div>
+                <div class="framed-photo photo-2" id="photo2">🖼️</div>
+                <div class="photo-booth" id="camera">
+                    <div class="booth-top">📸</div>
+                    <div class="tripod-legs"></div>
+                </div>
+            </div>
+
+            <!-- Right Wall Decor -->
+            <div class="wall-decor-right">
+                <div class="shelf">
+                    <span class="plant">🪴</span>
+                    <span class="jar">🫙</span>
+                </div>
+            </div>
+
+            <!-- Floating Balloons -->
+            <div class="balloon balloon-1" data-id="0">🎈</div>
+            <div class="balloon balloon-2" data-id="1">💖</div>
+            <div class="balloon balloon-3" data-id="2">🎈</div>
+            <div class="balloon balloon-4" data-id="3">🎈</div>
+            <div class="balloon balloon-5" data-id="4">💖</div>
+
+            <!-- Blue Rug & Table Centerpiece -->
+            <div class="carpet">
+                <!-- Side Chairs -->
+                <div class="chair chair-left">🪑</div>
+                <div class="chair chair-right">🪑</div>
+
+                <!-- Main Table -->
+                <div class="table">
+                    <!-- Table Feast -->
+                    <div class="table-feast">
+                        <span class="cupcakes">🧁</span>
+                        <div class="cake" id="cake">
+                            <div class="candles" id="candles">🕯️🕯️🕯️</div>
+                            <div class="cake-body">🎂</div>
+                        </div>
+                        <span class="flowers">🌸</span>
+                        <span class="drinks">🍹</span>
+                    </div>
+                </div>
+
+                <!-- Front Chairs -->
+                <div class="chair chair-front-1">🎀</div>
+                <div class="chair chair-front-2">🎀</div>
+
+                <!-- Pixel Pet -->
+                <div class="pixel-pet" id="pet">🐈</div>
+            </div>
+
+            <!-- Presents Stacks -->
+            <div class="presents-left">
+                <div class="gift gift-1" data-id="0">🎁</div>
+                <div class="gift gift-2" data-id="1">🎁</div>
+            </div>
+            <div class="presents-right">
+                <div class="gift gift-3" data-id="2">🎁</div>
+                <div class="gift gift-4" data-id="3">🎁</div>
+                <div class="gift gift-5" data-id="4">🎁</div>
+                <div class="gift gift-6" data-id="5">🎁</div>
+            </div>
+        </div>
+
+        <!-- Quest HUD -->
         <div id="hud">
             <div class="hud-item">🎁 GIFTS <span id="hud-gifts">0/6</span></div>
-            <div class="hud-item">🎈 BALLOONS <span id="hud-balloons">0/10</span></div>
+            <div class="hud-item">🎈 BALLOONS <span id="hud-balloons">0/5</span></div>
             <div class="hud-item">❤️ HEARTS <span id="hud-hearts">0/10</span></div>
             <div class="hud-item">⭐ SECRETS <span id="hud-secrets">0/5</span></div>
             <div class="hud-item">🎂 CAKE <span id="hud-cake">❌</span></div>
             <button id="audio-toggle" class="pixel-btn">🔊 Sound ON</button>
         </div>
 
+        <!-- Modals & Overlays -->
         <div id="intro-modal" class="modal-overlay">
-            <div class="pixel-box intro-box">
+            <div class="pixel-box">
                 <div class="dialogue-header">🎂 PARTY TIME!</div>
-                <p id="intro-text-1">Welcome to your birthday party! 🎂</p>
-                <p id="intro-text-2" class="sub-text">There are surprises hidden around the room...</p>
+                <p>Welcome to your digital party room!</p>
+                <p class="sub-text">Explore gifts, pop balloons, pet the cat, and blow out your candles! 🎈</p>
                 <button id="start-btn" class="pixel-btn highlight-btn">START EXPLORING</button>
             </div>
         </div>
 
         <div id="dialogue-modal" class="modal-overlay hidden">
-            <div class="pixel-box dialogue-box">
+            <div class="pixel-box">
                 <div id="dialogue-title" class="dialogue-header">💌 Message</div>
-                <div id="dialogue-content" class="dialogue-body">Sample text...</div>
+                <div id="dialogue-content" class="dialogue-body">Text here...</div>
                 <button id="dialogue-close" class="pixel-btn">CLOSE</button>
             </div>
         </div>
 
-        <div id="memory-modal" class="modal-overlay hidden">
-            <div class="pixel-box game-box">
-                <div class="dialogue-header">🧠 Memory Match Mini-Game</div>
-                <p class="game-instruction">Match all pixel pairs to unlock a secret message!</p>
-                <div id="memory-grid" class="memory-grid"></div>
-                <button id="memory-close" class="pixel-btn margin-top">CLOSE</button>
-            </div>
-        </div>
-
-        <div id="scratch-modal" class="modal-overlay hidden">
-            <div class="pixel-box game-box">
-                <div class="dialogue-header">💌 Scratch Card</div>
-                <p class="game-instruction">Scratch off the layer to reveal your note!</p>
-                <div class="scratch-container">
-                    <div class="scratch-reveal">"You make the world brighter every day!" 🌟</div>
-                    <canvas id="scratchCanvas" width="280" height="140"></canvas>
-                </div>
-                <button id="scratch-close" class="pixel-btn margin-top">CLOSE</button>
-            </div>
-        </div>
-
         <div id="cake-modal" class="modal-overlay hidden">
-            <div class="pixel-box dialogue-box">
+            <div class="pixel-box">
                 <div class="dialogue-header">🎂 Make a Wish!</div>
-                <p id="cake-instruction">Blow into your mic or click below to blow out candles!</p>
-                <div class="mic-status-container">
-                    <div id="mic-indicator" class="mic-indicator"></div>
-                </div>
-                <div class="btn-group">
-                    <button id="blow-fallback-btn" class="pixel-btn highlight-btn">BLOW OUT CANDLES 🕯️</button>
-                    <button id="cake-close-btn" class="pixel-btn">CANCEL</button>
-                </div>
+                <p>Blow into your microphone or click below to extinguish the candles!</p>
+                <button id="blow-btn" class="pixel-btn highlight-btn">BLOW OUT CANDLES 🕯️️</button>
+                <button id="cake-cancel-btn" class="pixel-btn">CANCEL</button>
             </div>
         </div>
 
