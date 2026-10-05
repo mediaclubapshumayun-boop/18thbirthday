@@ -1,4 +1,4 @@
-// Default seed presents if database is empty
+// Default initial gift presets
 const defaultPresents = [
     {
         sender: "Rebekah",
@@ -17,31 +17,31 @@ const defaultPresents = [
 let loadedPresents = [];
 let selectedWrapStyle = "wrap-pink-hearts";
 let selectedWrapName = "PINK HEARTS";
+let candlesBlownOut = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-    initApp();
+    loadLocalPresents();
     setupListeners();
 });
 
-function initApp() {
-    fetchPresentsFromFirebase();
-}
-
-function fetchPresentsFromFirebase() {
-    if (window.db) {
-        window.db.collection("presents").onSnapshot(snapshot => {
-            loadedPresents = [];
-            snapshot.forEach(doc => loadedPresents.push(doc.data()));
-            if (loadedPresents.length === 0) loadedPresents = defaultPresents;
-            renderPresentsInRoom();
-        }, () => {
+// Load gifts from localStorage or initialize default gifts
+function loadLocalPresents() {
+    const stored = localStorage.getItem("birthday_presents");
+    if (stored) {
+        try {
+            loadedPresents = JSON.parse(stored);
+        } catch(e) {
             loadedPresents = defaultPresents;
-            renderPresentsInRoom();
-        });
+        }
     } else {
         loadedPresents = defaultPresents;
-        renderPresentsInRoom();
     }
+    renderPresentsInRoom();
+}
+
+function savePresentsLocally() {
+    localStorage.setItem("birthday_presents", JSON.stringify(loadedPresents));
+    renderPresentsInRoom();
 }
 
 function renderPresentsInRoom() {
@@ -65,6 +65,7 @@ function renderPresentsInRoom() {
     });
 }
 
+// Modal View Gift
 function openPresentModal(gift) {
     document.getElementById("card-sender-name").innerText = gift.sender || "Anonymous";
     document.getElementById("card-letter-text").innerText = gift.message || "Happy Birthday!";
@@ -89,7 +90,7 @@ function setupListeners() {
         document.getElementById("view-present-modal").classList.add("hidden");
     };
 
-    // Open Leave Present Wrapping Station
+    // Open Leave Present Modal
     document.getElementById("add-gift-btn").onclick = () => {
         document.getElementById("create-present-modal").classList.remove("hidden");
     };
@@ -97,7 +98,7 @@ function setupListeners() {
         document.getElementById("create-present-modal").classList.add("hidden");
     };
 
-    // Select Wrapping Option (Image 2)
+    // Wrapping Option Buttons
     document.querySelectorAll(".wrap-option").forEach(opt => {
         opt.onclick = (e) => {
             document.querySelectorAll(".wrap-option").forEach(o => o.classList.remove("active"));
@@ -110,14 +111,14 @@ function setupListeners() {
         };
     });
 
-    // Submit New Present
+    // Create Present Submission
     document.getElementById("submit-wrap-btn").onclick = () => {
         const sender = document.getElementById("input-sender").value.trim();
         const message = document.getElementById("input-message").value.trim();
         const photoUrl = document.getElementById("input-photo-url").value.trim();
 
         if (!message) {
-            alert("Please write a message for your present!");
+            alert("Please write a letter for the birthday gift!");
             return;
         }
 
@@ -125,45 +126,101 @@ function setupListeners() {
             sender: sender || "A Friend",
             message: message,
             photoUrl: photoUrl || "",
-            style: selectedWrapStyle,
-            createdAt: new Date().toISOString()
+            style: selectedWrapStyle
         };
 
-        if (window.db) {
-            window.db.collection("presents").add(newGift);
-        } else {
-            loadedPresents.push(newGift);
-            renderPresentsInRoom();
-        }
+        loadedPresents.push(newGift);
+        savePresentsLocally();
 
         document.getElementById("create-present-modal").classList.add("hidden");
-        // Clear fields
         document.getElementById("input-sender").value = "";
         document.getElementById("input-message").value = "";
         document.getElementById("input-photo-url").value = "";
     };
 
-    // Cake & Candles Interaction
+    // Cake Click & Microphone Setup
     document.getElementById("cake-trigger").onclick = () => {
-        document.getElementById("cake-modal").classList.remove("hidden");
-    };
-    document.getElementById("close-cake-btn").onclick = () => {
-        document.getElementById("cake-modal").classList.add("hidden");
-    };
-    document.getElementById("blow-candles-btn").onclick = () => {
-        document.getElementById("candles-flame").innerText = "💨";
-        document.getElementById("cake-modal").classList.add("hidden");
-    };
-
-    // Audio Toggle
-    document.getElementById("audio-btn").onclick = () => {
-        const music = document.getElementById("bg-music");
-        if (music.paused) {
-            music.play();
-            document.getElementById("audio-btn").innerText = "🎵";
-        } else {
-            music.pause();
-            document.getElementById("audio-btn").innerText = "🔇";
+        if (candlesBlownOut) {
+            // Relight candles on click
+            candlesBlownOut = false;
+            document.getElementById("candles-container").innerHTML = `
+                <span class="flame">🔥</span>
+                <span class="flame">🔥</span>
+                <span class="flame">🔥</span>
+            `;
+            document.getElementById("mic-status-bar").innerHTML = "🕯️ Candles relit! Blow into your mic or click the cake!";
+            return;
         }
+        
+        initMicrophoneBlow();
     };
+}
+
+// Web Audio API Microphone Detection for Blowing Out Candles
+function initMicrophoneBlow() {
+    const statusBar = document.getElementById("mic-status-bar");
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        extinguishCandles();
+        statusBar.innerText = "💨 Candles blown out!";
+        return;
+    }
+
+    statusBar.innerText = "🎙️ Requesting microphone permission... Blow directly into your mic!";
+
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        .then(stream => {
+            statusBar.innerText = "🌬️ Microphone active! Blow hard into your microphone to put out the flames!";
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const microphone = audioContext.createMediaStreamSource(stream);
+            const analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256;
+            
+            microphone.connect(analyser);
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+            function checkBlow() {
+                if (candlesBlownOut) return;
+
+                analyser.getByteFrequencyData(dataArray);
+                
+                // Calculate average volume level
+                let sum = 0;
+                for (let i = 0; i < dataArray.length; i++) {
+                    sum += dataArray[i];
+                }
+                let averageVolume = sum / dataArray.length;
+
+                // Blowing creates a strong low-frequency/high-volume threshold
+                if (averageVolume > 45) {
+                    extinguishCandles();
+                    statusBar.innerText = "🎉 Yay! You blew out the candles! Click the cake to relight them.";
+                    
+                    // Stop tracks to release mic icon in browser
+                    stream.getTracks().forEach(track => track.stop());
+                    audioContext.close();
+                    return;
+                }
+
+                requestAnimationFrame(checkBlow);
+            }
+
+            checkBlow();
+        })
+        .catch(err => {
+            console.warn("Microphone access denied or error:", err);
+            // Fallback to instant blow out if mic is blocked/denied
+            extinguishCandles();
+            statusBar.innerText = "💨 Blow out successful! (Microphone permission was not granted)";
+        });
+}
+
+function extinguishCandles() {
+    candlesBlownOut = true;
+    document.getElementById("candles-container").innerHTML = `
+        <span class="smoke">💨</span>
+        <span class="smoke">💨</span>
+        <span class="smoke">💨</span>
+    `;
 }
