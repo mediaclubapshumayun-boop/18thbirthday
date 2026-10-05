@@ -3,180 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Happy Birthday! 🎂</title>
+    <title>Pixel Birthday Party Room 🎂</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     
-    <!-- Firebase App & Firestore (v9 Compat Mode) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-    <!-- Main Fixed Pixel Room Viewport -->
-    <div id="room-container">
+    <!-- Main Game Viewport -->
+    <div id="game-container">
         <div id="room">
-            
-            <!-- Ceiling Rafters & String Lights -->
+            <!-- Roof Rafters & Hanging Decor -->
             <div class="rafters"></div>
-            <div class="garland-left"></div>
-            <div class="garland-right"></div>
-            <div class="star-lights">
-                <span class="star-light s1">★</span>
-                <span class="star-light s2">★</span>
-                <span class="star-light s3">★</span>
-                <span class="star-light s4">★</span>
+            <div class="garland"></div>
+            <div class="hanging-stars">
+                <span>★</span><span>★</span><span>★</span><span>★</span>
             </div>
 
-            <!-- Arched Happy Birthday Banner -->
-            <div class="banner-container">
-                <div class="bday-banner">
-                    <span>H</span><span>A</span><span>P</span><span>P</span><span>Y</span>
-                    &nbsp;
-                    <span>B</span><span>I</span><span>R</span><span>T</span><span>H</span><span>D</span><span>A</span><span>Y</span><span>!</span>
-                </div>
+            <!-- Happy Birthday Banner -->
+            <div class="banner-wrapper">
+                <div class="bday-banner">HAPPY BIRTHDAY!</div>
             </div>
 
-            <!-- Center Night Sky Window -->
-            <div class="window-frame">
-                <div class="night-sky">
+            <!-- Center Window & Night View -->
+            <div class="window">
+                <div class="sky">
                     <div class="moon">🌙</div>
-                    <div class="pixel-star st1">✦</div>
-                    <div class="pixel-star st2">✦</div>
-                    <div class="pixel-star st3">✦</div>
-                    <div class="city-lights"></div>
+                    <div class="stars">✦ &nbsp; ✦ &nbsp; ✦</div>
                 </div>
-                <div class="curtain curtain-left"></div>
-                <div class="curtain curtain-right"></div>
+                <div class="curtain curtain-l"></div>
+                <div class="curtain curtain-r"></div>
             </div>
 
-            <!-- Left Wall Decor & Tripod Camera -->
-            <div class="wall-decor-left">
-                <div class="pixel-frame f1">🖼️</div>
-                <div class="pixel-frame f2">🖼️</div>
-                <div class="photo-booth">
-                    <div class="camera-body">📷</div>
-                    <div class="tripod-legs"></div>
-                </div>
+            <!-- Left Wall Props (Tripod Camera) -->
+            <div class="wall-left">
+                <div class="pixel-frame">🖼️</div>
+                <div class="retro-camera">📸</div>
             </div>
 
             <!-- Right Wall Shelf -->
-            <div class="wall-decor-right">
-                <div class="shelf">
-                    <span class="plant">🪴</span>
-                    <span class="jar">🫙</span>
-                </div>
+            <div class="wall-right">
+                <div class="shelf">🪴 🫙</div>
             </div>
 
-            <!-- Floating Room Balloons -->
-            <div class="balloon balloon-pink">🎈</div>
-            <div class="balloon balloon-yellow">🎈</div>
-            <div class="balloon balloon-purple">🎈</div>
-            <div class="balloon balloon-heart">💖</div>
-            <div class="balloon balloon-green">🎈</div>
+            <!-- Floating Balloons -->
+            <div class="balloon b-1">🎈</div>
+            <div class="balloon b-2">💖</div>
+            <div class="balloon b-3">🎈</div>
+            <div class="balloon b-4">🎈</div>
 
-            <!-- Stacks of Gifts (Left Floor) -->
-            <div class="gifts-left">
-                <div class="gift-box gift-0" data-index="0">
-                    <div class="gift-lid"></div>
-                    <div class="gift-body">🎁</div>
-                </div>
-                <div class="gift-box gift-1" data-index="1">
-                    <div class="gift-lid"></div>
-                    <div class="gift-body">🎁</div>
-                </div>
+            <!-- Stacks of Interactive Presents (Left Floor) -->
+            <div class="gift-stack gift-stack-left" id="gifts-left-container">
+                <!-- Injected via JavaScript/Firebase -->
             </div>
 
-            <!-- Blue Rug & Central Banquet Table -->
-            <div class="blue-carpet">
-                
-                <!-- Rear Chairs -->
-                <div class="chair chair-back-left">🪑</div>
-                <div class="chair chair-back-right">🪑</div>
+            <!-- Carpet & Center Table Setup -->
+            <div class="blue-rug">
+                <!-- Side/Back Chairs -->
+                <div class="chair chair-l">🪑</div>
+                <div class="chair chair-r">🪑</div>
 
-                <!-- Dining Table -->
-                <div class="dining-table">
-                    <div class="table-items">
-                        <div class="dessert-tier">🧁</div>
+                <!-- Dining Table with Gingham Tablecloth -->
+                <div class="table">
+                    <div class="table-feast">
+                        <span class="cupcakes">🧁</span>
                         
-                        <!-- Interative Birthday Cake -->
-                        <div class="cake-wrapper" id="cake-trigger">
-                            <div class="candles-container" id="candles">
-                                <span class="flame f-1">🔥</span>
-                                <span class="flame f-2">🔥</span>
-                                <span class="flame f-3">🔥</span>
-                            </div>
-                            <div class="cake-graphic">🎂</div>
+                        <!-- Interactive Birthday Cake -->
+                        <div class="cake" id="cake-trigger">
+                            <div class="candles" id="candles-flame">🔥 🔥 🔥</div>
+                            <div class="cake-body">🎂</div>
                         </div>
 
-                        <div class="flower-vase">💐</div>
-                        <div class="drinks">🍹</div>
+                        <span class="flower-pot">🌸</span>
+                        <span class="juice">🍹</span>
                     </div>
                 </div>
 
-                <!-- Front Chairs with Pink Bows -->
-                <div class="chair chair-front-left">🎀</div>
-                <div class="chair chair-front-right">🎀</div>
+                <!-- Front Chairs with Bows -->
+                <div class="chair chair-f1">🎀</div>
+                <div class="chair chair-f2">🎀</div>
 
-                <!-- Orange Pixel Cat in Foreground -->
-                <div class="pixel-cat">🐈</div>
+                <!-- Pixel Orange Cat -->
+                <div class="cat">🐈</div>
             </div>
 
-            <!-- Stacks of Gifts (Right Floor) -->
-            <div class="gifts-right">
-                <div class="gift-box gift-2" data-index="2">
-                    <div class="gift-lid"></div>
-                    <div class="gift-body">🎁</div>
-                </div>
-                <div class="gift-box gift-3" data-index="3">
-                    <div class="gift-lid"></div>
-                    <div class="gift-body">🎁</div>
-                </div>
-                <div class="gift-box gift-4" data-index="4">
-                    <div class="gift-lid"></div>
-                    <div class="gift-body">🎁</div>
-                </div>
+            <!-- Stacks of Interactive Presents (Right Floor) -->
+            <div class="gift-stack gift-stack-right" id="gifts-right-container">
+                <!-- Injected via JavaScript/Firebase -->
             </div>
-
+            
+            <!-- Floating "Leave a Present" Button -->
+            <button id="add-gift-btn" class="pixel-btn leave-gift-btn">🎁 LEAVE A PRESENT</button>
         </div>
     </div>
 
-    <!-- Minimal Audio Toggle Button -->
-    <button id="audio-toggle" class="pixel-audio-btn" aria-label="Toggle Audio">🎵</button>
+    <!-- Minimal Audio Controls -->
+    <button id="audio-btn" class="pixel-btn audio-toggle">🎵</button>
 
-    <!-- Message Modal Overlay (Gift Unboxing) -->
-    <div id="message-modal" class="pixel-modal hidden">
-        <div class="pixel-dialog">
-            <div class="pixel-dialog-header">
-                <span>💌 A little message for you</span>
+    <!-- ========================================== -->
+    <!-- MODAL 1: VIEW PRESENT (Matches Image 3)    -->
+    <!-- ========================================== -->
+    <div id="view-present-modal" class="pixel-modal hidden">
+        <div class="present-card-container">
+            <div class="card-header-pink">
+                <span class="header-sub">A PRESENT FROM</span>
+                <h2 id="card-sender-name">Friend Name</h2>
+                <button class="close-card-x" id="close-view-btn">✕</button>
             </div>
-            <div id="modal-text" class="pixel-dialog-body">
-                <!-- Message injected here -->
+            
+            <div class="card-content-split">
+                <!-- Left: Handwritten Letter Note -->
+                <div class="letter-box">
+                    <div class="tab-label">LETTER</div>
+                    <p id="card-letter-text">You better have a good day!</p>
+                </div>
+                
+                <!-- Right: Polaroid Photo Attachment -->
+                <div class="photo-box">
+                    <div class="tab-label">PHOTO</div>
+                    <div class="polaroid-frame">
+                        <img id="card-photo-img" src="" alt="Memory Photo" />
+                    </div>
+                </div>
             </div>
-            <button id="close-message-btn" class="pixel-btn">CLOSE</button>
+            
+            <button class="pixel-btn card-close-btn" id="close-card-btn">CLOSE</button>
         </div>
     </div>
 
-    <!-- Candle Blowing Modal Overlay -->
+    <!-- ========================================== -->
+    <!-- MODAL 2: LEAVE A PRESENT (Matches Image 2)  -->
+    <!-- ========================================== -->
+    <div id="create-present-modal" class="pixel-modal hidden">
+        <div class="wrapping-station-box">
+            <div class="station-header">
+                <h3>PICK THE WRAPPING</h3>
+                <span class="step-text">STEP 1 OF 1</span>
+            </div>
+
+            <div class="preview-present-display">
+                <div id="wrap-preview-icon" class="big-gift-preview wrap-pink-hearts">🎁</div>
+                <div id="wrap-selected-name" class="wrap-name-label">PINK HEARTS</div>
+            </div>
+
+            <!-- Wrapping Selector Grid -->
+            <div class="wrap-options-grid">
+                <button class="wrap-option active" data-style="wrap-pink-hearts" data-name="PINK HEARTS">🎁</button>
+                <button class="wrap-option" data-style="wrap-blue-squares" data-name="BLUE SQUARES">🎁</button>
+                <button class="wrap-option" data-style="wrap-purple-dots" data-name="PURPLE DOTS">🎁</button>
+                <button class="wrap-option" data-style="wrap-gingham" data-name="PINK GINGHAM">🎁</button>
+                <button class="wrap-option" data-style="wrap-black-white" data-name="MONOCHROME">🎁</button>
+            </div>
+
+            <!-- Inputs for Letter & Photo -->
+            <div class="present-form-inputs">
+                <input type="text" id="input-sender" placeholder="Your Name" maxlength="20" />
+                <textarea id="input-message" placeholder="Write your birthday letter..." rows="3"></textarea>
+                <input type="url" id="input-photo-url" placeholder="Photo URL (optional)" />
+            </div>
+
+            <div class="station-actions">
+                <button id="cancel-wrap-btn" class="pixel-btn">BACK</button>
+                <button id="submit-wrap-btn" class="pixel-btn highlight-btn">WRAP IT UP!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: CAKE & CANDLE BLOWING              -->
+    <!-- ========================================== -->
     <div id="cake-modal" class="pixel-modal hidden">
-        <div class="pixel-dialog">
-            <div class="pixel-dialog-header">
-                <span id="cake-modal-title">Make a wish... 🎂</span>
-            </div>
-            <div class="pixel-dialog-body">
-                <p id="mic-status-text">Blow into your microphone or press the button to extinguish the candles!</p>
-                <div id="blow-indicator" class="blow-bar-container hidden">
-                    <div id="blow-bar-fill" class="blow-bar-fill"></div>
-                </div>
-            </div>
-            <div class="pixel-dialog-footer">
-                <button id="manual-blow-btn" class="pixel-btn highlight-btn">BLOW OUT CANDLES 🕯️</button>
+        <div class="simple-pixel-dialog">
+            <h3>Make a wish... 🎂</h3>
+            <p id="cake-mic-status">Blow into your microphone or press the button below!</p>
+            <div class="dialog-buttons">
+                <button id="blow-candles-btn" class="pixel-btn highlight-btn">BLOW OUT CANDLES 🕯️</button>
                 <button id="close-cake-btn" class="pixel-btn">CANCEL</button>
             </div>
         </div>
     </div>
 
-    <!-- Audio Elements -->
     <audio id="bg-music" loop src="assets/music/cozy_pixel_birthday.mp3"></audio>
 
     <script src="firebase-config.js"></script>
