@@ -3,27 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Birthday Party Room 🎂</title>
+    <title>Emma's Birthday Party Room 🎂</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div id="game-viewport">
-        <!-- Pixel Art Engine Canvas -->
-        <canvas id="room-canvas" width="600" height="400"></canvas>
+    <!-- Outer Page Floating Balloons Container -->
+    <div id="bg-balloons-container"></div>
 
-        <!-- Bottom Action Button -->
-        <button id="add-gift-btn" class="pixel-btn leave-gift-btn">🎁 LEAVE A PRESENT</button>
+    <!-- Outer Border Container (Matches Image) -->
+    <div id="outer-frame">
+        <div class="top-subtitle">EMMA'S 25TH BIRTHDAY!</div>
+        
+        <div id="game-viewport">
+            <canvas id="room-canvas" width="640" height="380"></canvas>
+            
+            <!-- Interactive Action Button -->
+            <button id="add-gift-btn" class="pixel-btn leave-gift-btn">🎁 LEAVE A PRESENT</button>
+        </div>
+
+        <div class="bottom-subtitle">EMMA'S 25TH BIRTHDAY!</div>
     </div>
 
-    <!-- Microphone & Interaction Status Bar -->
+    <!-- Interactive Status Bar -->
     <div id="mic-status-bar" class="mic-status">
-        🎤 Click the <strong>Birthday Cake</strong> to enable mic detection and blow out candles!
+        🎈 Pop the balloons! 🎤 Click the cake to enable mic detection & blow out candles!
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL 1: VIEW PRESENT CARD                 -->
+    <!-- MODAL 1: OPEN PRESENT CARD                 -->
     <!-- ========================================== -->
     <div id="view-present-modal" class="pixel-modal hidden">
         <div class="present-card-container">
@@ -34,13 +43,11 @@
             </div>
             
             <div class="card-content-split">
-                <!-- Left: Letter -->
                 <div class="letter-box">
                     <div class="tab-label">LETTER</div>
-                    <p id="card-letter-text">Happy Birthday!</p>
+                    <p id="card-letter-text">You better have a good day!</p>
                 </div>
                 
-                <!-- Right: Polaroid Photo -->
                 <div class="photo-box">
                     <div class="tab-label">PHOTO</div>
                     <div class="polaroid-frame">
@@ -54,7 +61,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODAL 2: LEAVE A PRESENT (WRAPPING)        -->
+    <!-- MODAL 2: LEAVE A PRESENT (WRAPPING STATION)-->
     <!-- ========================================== -->
     <div id="create-present-modal" class="pixel-modal hidden">
         <div class="wrapping-station-box">
@@ -68,7 +75,7 @@
                 <div id="wrap-selected-name" class="wrap-name-label">PINK HEARTS</div>
             </div>
 
-            <!-- Wrapping Selector Grid -->
+            <!-- Custom Wrapping Options -->
             <div class="wrap-options-grid">
                 <button class="wrap-option active" data-color="#ff70a6" data-ribbon="#ffffff" data-name="PINK HEARTS">🎁</button>
                 <button class="wrap-option" data-color="#3a86ff" data-ribbon="#ffbe0b" data-name="BLUE SQUARES">🎁</button>
@@ -77,7 +84,6 @@
                 <button class="wrap-option" data-color="#fb5607" data-ribbon="#ffbe0b" data-name="SUNBURST">🎁</button>
             </div>
 
-            <!-- Present Inputs -->
             <div class="present-form-inputs">
                 <input type="text" id="input-sender" placeholder="Your Name" maxlength="20" />
                 <textarea id="input-message" placeholder="Write your birthday letter..." rows="3"></textarea>
