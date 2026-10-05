@@ -1,287 +1,258 @@
-// --- STATE & DATA ---
 const canvas = document.getElementById("room-canvas");
 const ctx = canvas.getContext("2d");
 
+// Interactive State
 let candlesLit = true;
-let micActive = false;
+let activeFlames = [true, true, true, true, true];
 let selectedColor = "#ff70a6";
 let selectedRibbon = "#ffffff";
 let selectedName = "PINK HEARTS";
 
-let presents = [
-    { id: 1, sender: "Rebekah", message: "You better have a good day!", photoUrl: "https://picsum.photos/id/1025/300/200", color: "#ff70a6", ribbon: "#ffffff", x: 490, y: 280, w: 26, h: 26 },
-    { id: 2, sender: "Alex", message: "Happy Birthday!! Wish you the best year ahead!", photoUrl: "https://picsum.photos/id/237/300/200", color: "#3a86ff", ribbon: "#ffbe0b", x: 520, y: 285, w: 28, h: 28 },
-    { id: 3, sender: "Sam", message: "Hope your day is full of cake & fun!", photoUrl: "", color: "#8338ec", ribbon: "#ff70a6", x: 500, y: 258, w: 24, h: 24 }
+// Room Balloons Data (Click to Pop)
+let roomBalloons = [
+    { x: 100, y: 100, radius: 10, color: "#ff70a6", popped: false },
+    { x: 120, y: 125, radius: 11, color: "#ffbe0b", popped: false },
+    { x: 530, y: 100, radius: 10, color: "#8338ec", popped: false },
+    { x: 550, y: 125, radius: 11, color: "#ff006e", popped: false },
+    { x: 520, y: 155, radius: 10, color: "#06d6a0", popped: false }
 ];
 
-// Load Saved Presents
-if (localStorage.getItem("pixel_party_presents")) {
-    try { presents = JSON.parse(localStorage.getItem("pixel_party_presents")); } catch(e){}
-}
+// Interactive Presents Data (On Table & Floor)
+let presents = [
+    { id: 1, sender: "Rebekah", message: "You better have a good day!", photoUrl: "https://picsum.photos/id/1025/300/200", color: "#3a86ff", ribbon: "#ffffff", x: 255, y: 175, w: 28, h: 28 }, // On Chair/Table
+    { id: 2, sender: "Alex", message: "Happy 25th Birthday!! Wishing you joy and cake!", photoUrl: "https://picsum.photos/id/237/300/200", color: "#ff70a6", ribbon: "#ffffff", x: 195, y: 250, w: 28, h: 28 }, // Left Floor
+    { id: 3, sender: "Sam", message: "Hope you open all the presents today!", photoUrl: "", color: "#8338ec", ribbon: "#ffffff", x: 435, y: 235, w: 28, h: 28 } // Right Floor
+];
 
+// Load / Save Local Storage
+if (localStorage.getItem("savado_party_presents")) {
+    try { presents = JSON.parse(localStorage.getItem("savado_party_presents")); } catch(e){}
+}
 function savePresents() {
-    localStorage.setItem("pixel_party_presents", JSON.stringify(presents));
+    localStorage.setItem("savado_party_presents", JSON.stringify(presents));
 }
 
-// --- CANVAS RENDERING ENGINE ---
+// Simple Web Audio API Sound Generator (No external audio files needed)
+function playPopSound() {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+    } catch(e){}
+}
+
+// --- RENDER PIXEL ROOM ---
 function drawPixelRoom() {
     ctx.imageSmoothingEnabled = false;
 
-    // 1. Upper Wall (Warm Pink Pixel Paper)
-    ctx.fillStyle = "#cf6382";
-    ctx.fillRect(0, 0, 600, 240);
+    // 1. Warm Brown Wall & Wood Wainscoting
+    ctx.fillStyle = "#8a4b38";
+    ctx.fillRect(0, 0, 640, 175); // Upper Wall
 
-    // Wall Wallpaper Texture Dots
-    ctx.fillStyle = "#b85270";
-    for(let x=10; x<600; x+=20) {
-        for(let y=10; y<240; y+=20) {
-            ctx.fillRect(x, y, 2, 2);
-        }
+    ctx.fillStyle = "#5c2d1e";
+    ctx.fillRect(0, 175, 640, 30); // Wainscoting Rail
+    ctx.fillStyle = "#421f14";
+    for(let x=0; x<640; x+=24) { ctx.fillRect(x, 175, 2, 30); }
+
+    // 2. Ceiling Rafters & Hanging Lantern
+    ctx.fillStyle = "#3a1c11";
+    ctx.fillRect(0, 0, 640, 20);
+    ctx.fillStyle = "#2b140b";
+    for(let x=0; x<640; x+=32) { ctx.fillRect(x, 0, 14, 20); }
+
+    // Center Lantern Light
+    ctx.fillStyle = "#ffb703"; ctx.fillRect(312, 18, 16, 20);
+    ctx.fillStyle = "#fb8500"; ctx.strokeRect(312, 18, 16, 20);
+
+    // Festive Paper Garlands Across Ceiling
+    const colors = ["#ff70a6", "#3a86ff", "#ffbe0b", "#ff006e", "#8338ec", "#06d6a0"];
+    for(let i=0; i<32; i++) {
+        ctx.fillStyle = colors[i % colors.length];
+        let offset = Math.sin(i * 0.4) * 6;
+        ctx.fillRect(i * 20, 22 + offset, 16, 6);
     }
 
-    // 2. Ceiling Rafters
-    ctx.fillStyle = "#4a2416";
-    ctx.fillRect(0, 0, 600, 22);
-    ctx.fillStyle = "#36190d";
-    for(let x=0; x<600; x+=40) {
-        ctx.fillRect(x, 0, 18, 22);
-    }
-
-    // Hanging Party Garland & Lights
-    const garlandColors = ["#ffbe0b", "#ff006e", "#8338ec", "#3a86ff", "#06d6a0"];
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#5a321d";
-    ctx.beginPath();
-    ctx.arc(150, 0, 150, 0.2, Math.PI - 0.2);
-    ctx.arc(450, 0, 150, 0.2, Math.PI - 0.2);
-    ctx.stroke();
-
-    for(let i=0; i<12; i++) {
-        ctx.fillStyle = garlandColors[i % garlandColors.length];
-        ctx.fillRect(30 + i * 45, 22 + Math.sin(i)*6, 6, 8);
-    }
-
-    // 3. Lower Wall Wood Panel WainsCoting
-    ctx.fillStyle = "#5c2e17";
-    ctx.fillRect(0, 210, 600, 30);
-    ctx.fillStyle = "#3e1e0e";
-    ctx.fillRect(0, 210, 600, 4);
-    for(let x=0; x<600; x+=30) {
-        ctx.fillRect(x, 214, 2, 26);
-    }
-
-    // 4. Wooden Floorboards
-    ctx.fillStyle = "#3a1c0d";
-    ctx.fillRect(0, 240, 600, 160);
-    ctx.fillStyle = "#2e160a";
-    for(let y=240; y<400; y+=20) {
-        ctx.fillRect(0, y, 600, 2);
-    }
-    for(let y=240; y<400; y+=20) {
-        let offset = (y % 40 === 0) ? 0 : 30;
-        for(let x=offset; x<600; x+=60) {
-            ctx.fillRect(x, y, 2, 20);
-        }
-    }
-
-    // 5. Central Window (Night View & Crescent Moon)
-    ctx.fillStyle = "#3e1e0e"; // Frame
-    ctx.fillRect(210, 50, 180, 140);
-    ctx.fillStyle = "#0a0e29"; // Sky
-    ctx.fillRect(218, 58, 164, 124);
-
-    // Stars & Moon inside Window
-    ctx.fillStyle = "#ffea00";
-    ctx.beginPath(); ctx.arc(245, 80, 12, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = "#0a0e29";
-    ctx.beginPath(); ctx.arc(249, 77, 10, 0, Math.PI*2); ctx.fill();
-
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(320, 70, 2, 2); ctx.fillRect(340, 95, 3, 3); ctx.fillRect(280, 110, 2, 2); ctx.fillRect(310, 130, 2, 2);
-
-    // Window Grids
-    ctx.fillStyle = "#3e1e0e";
-    ctx.fillRect(298, 58, 4, 124);
-    ctx.fillRect(218, 120, 164, 4);
-
-    // Curtains (Pink Gingham Checkered)
-    drawCurtain(212, 58, 28, 124);
-    drawCurtain(360, 58, 28, 124);
-
-    // 6. Happy Birthday Banner
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(160, 32, 280, 24);
-    ctx.strokeStyle = "#ff70a6"; ctx.lineWidth = 3;
-    ctx.strokeRect(160, 32, 280, 24);
+    // 3. Center Window & Night View
+    ctx.fillStyle = "#3a1c11"; ctx.fillRect(255, 45, 130, 115); // Frame
+    ctx.fillStyle = "#081026"; ctx.fillRect(261, 51, 118, 103); // Sky
     
-    ctx.fillStyle = "#3a86ff";
-    ctx.font = "10px 'Press Start 2P'";
-    ctx.textAlign = "center";
-    ctx.fillText("HAPPY BIRTHDAY!", 300, 48);
-
-    // 7. Side Decor Props
-    // Left: Frame & Speaker
-    ctx.fillStyle = "#3e1e0e"; ctx.fillRect(40, 110, 24, 24);
-    ctx.fillStyle = "#06d6a0"; ctx.fillRect(43, 113, 18, 18);
-    ctx.fillStyle = "#fb5607"; ctx.fillRect(40, 150, 22, 30); // Retro Speaker
-
-    // Right: Wall Shelf & Plant
-    ctx.fillStyle = "#3e1e0e"; ctx.fillRect(510, 110, 50, 6);
-    ctx.fillStyle = "#3a5a40"; ctx.fillRect(520, 96, 12, 14); // Plant
-
-    // Balloons Left & Right
-    drawBalloon(100, 100, "#ff70a6");
-    drawBalloon(130, 125, "#fb5607");
-    drawBalloon(480, 100, "#8338ec");
-    drawBalloon(460, 130, "#3a86ff");
-
-    // 8. Large Blue Rug
-    ctx.fillStyle = "#255384";
-    ctx.fillRect(110, 260, 380, 110);
-    ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3;
-    ctx.strokeRect(114, 264, 372, 102);
-
-    // 9. Dining Chairs (With Bows)
-    drawChair(140, 250);
-    drawChair(430, 250);
-    drawFrontChair(220, 345);
-    drawFrontChair(350, 345);
-
-    // 10. Dining Table & Checkered Tablecloth
-    ctx.fillStyle = "#ff477e";
-    ctx.fillRect(170, 270, 260, 65);
+    // Moon & Stars & Distant Houses
+    ctx.fillStyle = "#ffea00";
+    ctx.beginPath(); ctx.arc(280, 70, 7, 0, Math.PI*2); ctx.fill();
     ctx.fillStyle = "#ffffff";
-    for(let x=170; x<430; x+=16) {
-        for(let y=270; y<335; y+=16) {
-            if ((x+y)%32 === 0) ctx.fillRect(x, y, 8, 8);
+    ctx.fillRect(340, 65, 2, 2); ctx.fillRect(320, 85, 2, 2); ctx.fillRect(355, 100, 2, 2);
+    ctx.fillStyle = "#111a3a"; ctx.fillRect(261, 130, 118, 24); // City Silhouette
+
+    // Window Divider Grids
+    ctx.fillStyle = "#3a1c11";
+    ctx.fillRect(319, 51, 2, 103); ctx.fillRect(261, 100, 118, 2);
+
+    // Pink Checkered Curtains
+    drawCurtain(256, 51, 20, 103);
+    drawCurtain(365, 51, 20, 103);
+
+    // 4. Happy Birthday Banner
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(230, 32, 180, 20);
+    ctx.strokeStyle = "#ff70a6"; ctx.lineWidth = 2; ctx.strokeRect(230, 32, 180, 20);
+    ctx.fillStyle = "#3a86ff"; ctx.font = "8px 'Press Start 2P'"; ctx.textAlign = "center";
+    ctx.fillText("HAPPY BIRTHDAY!", 320, 46);
+
+    // 5. Left & Right Wall Props
+    // Left: Frames & Photo Booth Stand
+    ctx.fillStyle = "#ffbe0b"; ctx.fillRect(35, 75, 16, 16);
+    ctx.fillStyle = "#ff70a6"; ctx.fillRect(35, 100, 16, 16);
+    ctx.fillStyle = "#fb5607"; ctx.fillRect(30, 130, 24, 30); // Speaker/Booth
+
+    // Right: Plant Shelf
+    ctx.fillStyle = "#3a1c11"; ctx.fillRect(520, 90, 40, 5);
+    ctx.fillStyle = "#3a5a40"; ctx.fillRect(530, 78, 10, 12); // Potted Plant
+
+    // 6. Floating Room Balloons (Interactive)
+    roomBalloons.forEach(b => {
+        if (!b.popped) {
+            ctx.fillStyle = b.color;
+            ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI*2); ctx.fill();
+            // Balloon String
+            ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(b.x, b.y + b.radius);
+            ctx.quadraticCurveTo(b.x - 4, b.y + b.radius + 10, b.x, b.y + b.radius + 22);
+            ctx.stroke();
+        }
+    });
+
+    // 7. Wooden Floorboards Perspective
+    ctx.fillStyle = "#a85d38"; ctx.fillRect(0, 205, 640, 175);
+    ctx.fillStyle = "#8a4b38";
+    for(let y=205; y<380; y+=16) { ctx.fillRect(0, y, 640, 2); }
+
+    // 8. Blue Rug with White Decorative Border
+    ctx.fillStyle = "#2b5c8f"; ctx.fillRect(170, 230, 300, 110);
+    ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2; ctx.strokeRect(174, 234, 292, 102);
+
+    // 9. Chairs with Pink Bow Backs
+    drawChair(205, 205); drawChair(405, 205);
+    drawFrontChair(245, 305); drawFrontChair(365, 305);
+
+    // 10. Dining Table & Pink-White Checkered Tablecloth
+    ctx.fillStyle = "#ff70a6"; ctx.fillRect(230, 215, 180, 75);
+    ctx.fillStyle = "#ffffff";
+    for(let x=230; x<410; x+=12) {
+        for(let y=215; y<290; y+=12) {
+            if ((x+y)%24 === 0) ctx.fillRect(x, y, 6, 6);
         }
     }
-    ctx.fillStyle = "#ab2d53"; // Table rim shadow
-    ctx.fillRect(170, 335, 260, 6);
+    ctx.fillStyle = "#ab2d53"; ctx.fillRect(230, 288, 180, 4);
 
-    // Table Feast Items
-    ctx.font = "16px sans-serif";
-    ctx.fillText("🧁", 200, 305);
-    ctx.fillText("🌸", 370, 305);
-    ctx.fillText("🍹", 395, 305);
+    // Table Treats (Cupcakes, Flower Vase, Drinks)
+    ctx.font = "12px sans-serif";
+    ctx.fillText("🧁", 250, 240);
+    ctx.fillText("🌸", 355, 240);
+    ctx.fillText("🍹", 380, 240);
 
-    // 11. Center Multi-Layer Birthday Cake & Candles
-    drawCake(280, 280);
+    // 11. Multi-Tiered Cake & Candles
+    drawCake(300, 220);
 
-    // 12. Little Orange Pixel Cat
-    drawCat(290, 355);
+    // 12. Little Orange Cat
+    drawCat(320, 325);
 
     // 13. Draw Presents Stack
     drawPresents();
 }
 
-// Custom Pixel Graphics Helper Functions
 function drawCurtain(x, y, w, h) {
-    ctx.fillStyle = "#ff70a6";
-    ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = "#ff70a6"; ctx.fillRect(x, y, w, h);
     ctx.fillStyle = "#ffffff";
-    for(let cy=y; cy<y+h; cy+=12) {
-        ctx.fillRect(x, cy, w, 4);
-    }
-}
-
-function drawBalloon(x, y, color) {
-    ctx.fillStyle = color;
-    ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI*2); ctx.fill();
-    ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(x, y+12); ctx.lineTo(x-3, y+30); ctx.stroke();
+    for(let cy=y; cy<y+h; cy+=10) ctx.fillRect(x, cy, w, 3);
 }
 
 function drawChair(x, y) {
-    ctx.fillStyle = "#5c2e17";
-    ctx.fillRect(x, y, 26, 45);
-    ctx.fillStyle = "#ff70a6"; // Back Bow
-    ctx.fillRect(x+5, y+10, 16, 10);
+    ctx.fillStyle = "#4a2416"; ctx.fillRect(x, y, 22, 38);
+    ctx.fillStyle = "#ff70a6"; ctx.fillRect(x+4, y+8, 14, 8); // Pink Bow
 }
 
 function drawFrontChair(x, y) {
-    ctx.fillStyle = "#4a2416";
-    ctx.fillRect(x, y, 30, 20);
-    ctx.fillStyle = "#ff70a6"; // Heart Bow
-    ctx.fillRect(x+10, y-4, 10, 10);
+    ctx.fillStyle = "#3a1c11"; ctx.fillRect(x, y, 24, 18);
+    ctx.fillStyle = "#ff70a6"; ctx.fillRect(x+8, y-3, 8, 8);
 }
 
 function drawCake(x, y) {
-    // Chocolate Tiers
-    ctx.fillStyle = "#5c3317";
-    ctx.fillRect(x, y+10, 40, 20); // Bottom Tier
-    ctx.fillRect(x+6, y, 28, 12);  // Top Tier
+    // Cake Body
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(x, y+10, 40, 18); // Base
+    ctx.fillStyle = "#ff70a6"; ctx.fillRect(x, y+10, 40, 4);   // Frosting
+    ctx.fillStyle = "#5c3317"; ctx.fillRect(x+5, y, 30, 10);  // Top Layer
+    ctx.fillStyle = "#ff70a6"; ctx.fillRect(x+5, y, 30, 3);
 
-    // Frosting
-    ctx.fillStyle = "#ffb703";
-    ctx.fillRect(x, y+10, 40, 4);
-    ctx.fillRect(x+6, y, 28, 3);
+    // Candles & Flames
+    for(let i=0; i<5; i++) {
+        let cx = x + 7 + i * 6;
+        ctx.fillStyle = "#ffea00"; ctx.fillRect(cx, y - 6, 2, 6); // Candle Stick
 
-    // Candles & Flame / Smoke
-    for(let i=0; i<3; i++) {
-        let cx = x + 10 + i * 10;
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(cx, y - 8, 3, 8); // Candle Stick
-
-        if (candlesLit) {
-            // Animated Flame
-            ctx.fillStyle = Math.random() > 0.5 ? "#ff006e" : "#ffbe0b";
-            ctx.fillRect(cx - 1, y - 14 + Math.floor(Math.random()*2), 5, 5);
+        if (candlesLit && activeFlames[i]) {
+            ctx.fillStyle = Math.random() > 0.4 ? "#ff006e" : "#fb8500";
+            ctx.fillRect(cx - 1, y - 11 + Math.floor(Math.random()*2), 4, 4);
         } else {
-            // Smoke Puff
             ctx.fillStyle = "#8d99ae";
-            ctx.fillRect(cx - 1, y - 14 - Math.floor(Math.random()*4), 4, 4);
+            ctx.fillRect(cx - 1, y - 11 - Math.floor(Math.random()*3), 3, 3);
         }
     }
 }
 
 function drawCat(x, y) {
-    ctx.fillStyle = "#fb5607"; // Orange body
-    ctx.fillRect(x, y, 18, 12);
-    ctx.fillRect(x+12, y-6, 8, 8); // Head
-    ctx.fillStyle = "#ffffff"; // Cream belly & ears
-    ctx.fillRect(x+13, y-8, 2, 2); ctx.fillRect(x+18, y-8, 2, 2);
-    ctx.fillStyle = "#000000"; // Eyes
-    ctx.fillRect(x+17, y-4, 2, 2);
+    ctx.fillStyle = "#fb5607"; ctx.fillRect(x, y, 16, 10); ctx.fillRect(x+10, y-5, 7, 7);
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(x+11, y-7, 2, 2); ctx.fillRect(x+15, y-7, 2, 2);
+    ctx.fillStyle = "#000000"; ctx.fillRect(x+14, y-3, 2, 2);
 }
 
 function drawPresents() {
     presents.forEach(p => {
-        // Box
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, p.w, p.h);
-
-        // Ribbon Cross
+        ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.w, p.h);
         ctx.fillStyle = p.ribbon;
         ctx.fillRect(p.x + Math.floor(p.w/2) - 2, p.y, 4, p.h);
         ctx.fillRect(p.x, p.y + Math.floor(p.h/2) - 2, p.w, 4);
-
-        // Ribbon Bow
-        ctx.fillRect(p.x + Math.floor(p.w/2) - 4, p.y - 4, 8, 4);
+        ctx.fillRect(p.x + Math.floor(p.w/2) - 3, p.y - 3, 6, 3);
     });
 }
 
-// --- INTERACTION & CLICK DETECTION ---
+// --- INTERACTION HANDLING ---
 canvas.addEventListener("click", (e) => {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-
     const clickX = (e.clientX - rect.left) * scaleX;
     const clickY = (e.clientY - rect.top) * scaleY;
 
-    // 1. Click Cake (Toggle/Light/Mic setup)
-    if (clickX >= 275 && clickX <= 325 && clickY >= 260 && clickY <= 310) {
+    // 1. Click Balloons to Pop
+    roomBalloons.forEach(b => {
+        if (!b.popped) {
+            let dist = Math.hypot(clickX - b.x, clickY - b.y);
+            if (dist <= b.radius + 4) {
+                b.popped = true;
+                playPopSound();
+            }
+        }
+    });
+
+    // 2. Click Cake to Blow Out / Relight Candles
+    if (clickX >= 295 && clickX <= 345 && clickY >= 200 && clickY <= 250) {
         if (!candlesLit) {
             candlesLit = true;
-            document.getElementById("mic-status-bar").innerText = "🕯️ Candles relit! Click cake or blow into your mic to extinguish!";
+            activeFlames = [true, true, true, true, true];
+            document.getElementById("mic-status-bar").innerText = "🕯️ Candles relit! Blow into your mic or click to extinguish!";
         } else {
             initMicrophone();
         }
         return;
     }
 
-    // 2. Click Presents
+    // 3. Click Presents to View
     presents.forEach(p => {
         if (clickX >= p.x && clickX <= p.x + p.w && clickY >= p.y && clickY <= p.y + p.h) {
             openViewModal(p);
@@ -289,12 +260,35 @@ canvas.addEventListener("click", (e) => {
     });
 });
 
-// --- MICROPHONE DETECTION ---
+// --- OUTER PAGE FLOATING BALLOONS ---
+function spawnBackgroundBalloons() {
+    const container = document.getElementById("bg-balloons-container");
+    const balloonEmojis = ["🎈", "💖", "💜", "💙", "🧡"];
+
+    for (let i = 0; i < 8; i++) {
+        const balloon = document.createElement("div");
+        balloon.className = "bg-balloon";
+        balloon.innerText = balloonEmojis[i % balloonEmojis.length];
+        balloon.style.left = `${Math.random() * 92 + 2}%`;
+        balloon.style.animationDelay = `${Math.random() * 10}s`;
+        balloon.style.animationDuration = `${10 + Math.random() * 6}s`;
+
+        balloon.onclick = () => {
+            playPopSound();
+            balloon.style.transform = "scale(1.8)";
+            balloon.style.opacity = "0";
+            setTimeout(() => balloon.remove(), 150);
+        };
+
+        container.appendChild(balloon);
+    }
+}
+
+// --- MICROPHONE DETECTION FOR CANDLE BLOWING ---
 function initMicrophone() {
     const status = document.getElementById("mic-status-bar");
-
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        candlesLit = false;
+        extinguishCandles();
         status.innerText = "💨 Candles blown out!";
         return;
     }
@@ -303,9 +297,7 @@ function initMicrophone() {
 
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
-            micActive = true;
-            status.innerText = "🌬️ Mic Active! Blow hard into your microphone to extinguish the candles!";
-
+            status.innerText = "🌬️ Mic Active! Blow hard into your microphone to blow out the candles!";
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const mic = audioCtx.createMediaStreamSource(stream);
             const analyser = audioCtx.createAnalyser();
@@ -316,15 +308,14 @@ function initMicrophone() {
 
             function listen() {
                 if (!candlesLit) return;
-
                 analyser.getByteFrequencyData(dataArray);
                 let sum = 0;
                 for(let i=0; i<dataArray.length; i++) sum += dataArray[i];
                 let avg = sum / dataArray.length;
 
-                if (avg > 40) { // Blow threshold
-                    candlesLit = false;
-                    status.innerText = "🎉 Yay! You blew out the candles! Click the cake to relight.";
+                if (avg > 38) { // Sound volume blow threshold
+                    extinguishCandles();
+                    status.innerText = "🎉 Yay! You blew out all the candles!";
                     stream.getTracks().forEach(t => t.stop());
                     audioCtx.close();
                     return;
@@ -334,12 +325,25 @@ function initMicrophone() {
             listen();
         })
         .catch(() => {
-            candlesLit = false;
-            status.innerText = "💨 Candles blown out! (Mic permission bypassed)";
+            extinguishCandles();
+            status.innerText = "💨 Candles blown out! (Microphone access bypassed)";
         });
 }
 
-// --- MODAL CONTROLS ---
+function extinguishCandles() {
+    let unlitIndex = 0;
+    let timer = setInterval(() => {
+        if (unlitIndex < activeFlames.length) {
+            activeFlames[unlitIndex] = false;
+            unlitIndex++;
+        } else {
+            candlesLit = false;
+            clearInterval(timer);
+        }
+    }, 150);
+}
+
+// --- MODAL DIALOG CONTROLS ---
 function openViewModal(present) {
     document.getElementById("card-sender-name").innerText = present.sender || "A Friend";
     document.getElementById("card-letter-text").innerText = present.message || "Happy Birthday!";
@@ -358,11 +362,10 @@ function openViewModal(present) {
 document.getElementById("close-card-btn").onclick = () => document.getElementById("view-present-modal").classList.add("hidden");
 document.getElementById("close-view-x").onclick = () => document.getElementById("view-present-modal").classList.add("hidden");
 
-// Create Present
+// Create Present Station
 document.getElementById("add-gift-btn").onclick = () => document.getElementById("create-present-modal").classList.remove("hidden");
 document.getElementById("cancel-wrap-btn").onclick = () => document.getElementById("create-present-modal").classList.add("hidden");
 
-// Select Wrapping Option
 document.querySelectorAll(".wrap-option").forEach(btn => {
     btn.onclick = (e) => {
         document.querySelectorAll(".wrap-option").forEach(b => b.classList.remove("active"));
@@ -371,25 +374,22 @@ document.querySelectorAll(".wrap-option").forEach(btn => {
         selectedColor = target.dataset.color;
         selectedRibbon = target.dataset.ribbon;
         selectedName = target.dataset.name;
-
         document.getElementById("wrap-selected-name").innerText = selectedName;
     };
 });
 
-// Submit New Present
 document.getElementById("submit-wrap-btn").onclick = () => {
     const sender = document.getElementById("input-sender").value.trim();
     const message = document.getElementById("input-message").value.trim();
     const photoUrl = document.getElementById("input-photo-url").value.trim();
 
     if (!message) {
-        alert("Please write a short birthday message!");
+        alert("Please write a birthday message!");
         return;
     }
 
-    // Place new present in stack
-    const newX = 470 + (presents.length % 4) * 22;
-    const newY = 320 - Math.floor(presents.length / 4) * 20;
+    const newX = 180 + (presents.length % 5) * 32;
+    const newY = 250 + Math.floor(presents.length / 5) * 10;
 
     presents.push({
         id: Date.now(),
@@ -398,7 +398,7 @@ document.getElementById("submit-wrap-btn").onclick = () => {
         photoUrl: photoUrl || "",
         color: selectedColor,
         ribbon: selectedRibbon,
-        x: newX, y: newY, w: 26, h: 26
+        x: newX, y: newY, w: 28, h: 28
     });
 
     savePresents();
@@ -408,7 +408,8 @@ document.getElementById("submit-wrap-btn").onclick = () => {
     document.getElementById("input-photo-url").value = "";
 };
 
-// Render Loop
+// Initial Start
+spawnBackgroundBalloons();
 function render() {
     drawPixelRoom();
     requestAnimationFrame(render);
