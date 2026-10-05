@@ -5,19 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cozy Pixel Birthday Quest 🎂</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Pixel Font -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <!-- Game Container -->
     <div id="game-container">
-        <!-- Main Canvas -->
         <canvas id="roomCanvas" width="960" height="640"></canvas>
 
-        <!-- Pixel Overlay HUD -->
         <div id="hud">
             <div class="hud-item">🎁 GIFTS <span id="hud-gifts">0/6</span></div>
             <div class="hud-item">🎈 BALLOONS <span id="hud-balloons">0/10</span></div>
@@ -27,7 +22,6 @@
             <button id="audio-toggle" class="pixel-btn">🔊 Sound ON</button>
         </div>
 
-        <!-- Start Intro Overlay -->
         <div id="intro-modal" class="modal-overlay">
             <div class="pixel-box intro-box">
                 <div class="dialogue-header">🎂 PARTY TIME!</div>
@@ -37,7 +31,6 @@
             </div>
         </div>
 
-        <!-- Generic Dialogue / Personal Message Modal -->
         <div id="dialogue-modal" class="modal-overlay hidden">
             <div class="pixel-box dialogue-box">
                 <div id="dialogue-title" class="dialogue-header">💌 Message</div>
@@ -46,7 +39,6 @@
             </div>
         </div>
 
-        <!-- Memory Mini-Game Modal -->
         <div id="memory-modal" class="modal-overlay hidden">
             <div class="pixel-box game-box">
                 <div class="dialogue-header">🧠 Memory Match Mini-Game</div>
@@ -56,11 +48,10 @@
             </div>
         </div>
 
-        <!-- Scratch Card Mini-Game Modal -->
         <div id="scratch-modal" class="modal-overlay hidden">
             <div class="pixel-box game-box">
                 <div class="dialogue-header">💌 Scratch Card</div>
-                <p class="game-instruction">Scratch off the golden layer using your cursor/finger!</p>
+                <p class="game-instruction">Scratch off the layer to reveal your note!</p>
                 <div class="scratch-container">
                     <div class="scratch-reveal">"You make the world brighter every day!" 🌟</div>
                     <canvas id="scratchCanvas" width="280" height="140"></canvas>
@@ -69,11 +60,10 @@
             </div>
         </div>
 
-        <!-- Cake Mic Blowing Overlay -->
         <div id="cake-modal" class="modal-overlay hidden">
             <div class="pixel-box dialogue-box">
                 <div class="dialogue-header">🎂 Make a Wish!</div>
-                <p id="cake-instruction">Blow into your microphone to blow out the candles, or click the button below!</p>
+                <p id="cake-instruction">Blow into your mic or click below to blow out candles!</p>
                 <div class="mic-status-container">
                     <div id="mic-indicator" class="mic-indicator"></div>
                 </div>
@@ -84,7 +74,6 @@
             </div>
         </div>
 
-        <!-- Final Grand Unlock Modal -->
         <div id="finale-modal" class="modal-overlay hidden">
             <div class="pixel-box finale-box">
                 <div class="dialogue-header gold-text">🎉 BIRTHDAY QUEST COMPLETE! 🎉</div>
@@ -95,7 +84,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="firebase-config.js"></script>
     <script src="script.js"></script>
 </body>
