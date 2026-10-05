@@ -3,96 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magical Pixel Birthday Room ⚡</title>
+    <title>Zash's 28th Birthday Feast! ⚡</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Outer Page Floating 8-Bit Balloons Container -->
+    <!-- Outer Floating Balloons -->
     <div id="bg-balloons-container"></div>
 
-    <!-- Outer Border Frame (Wizarding Pink Style) -->
+    <!-- Outer Brown Frame (Exact Image Style) -->
     <div id="outer-frame">
-        <div class="top-subtitle">✨ HAPPEE BIRTHDAE HARRY ✨</div>
+        <div class="top-subtitle">Zash's 28th birthday!</div>
         
         <div id="game-viewport">
             <canvas id="room-canvas" width="640" height="380"></canvas>
             
-            <!-- Interactive Action Button -->
-            <button id="add-gift-btn" class="pixel-btn leave-gift-btn">📜 LEAVE A MAGICAL PRESENT</button>
+            <button id="add-gift-btn" class="pixel-btn leave-gift-btn">🎁 LEAVE A PRESENT</button>
         </div>
 
-        <div class="bottom-subtitle">⚡ HOGWARTS EXPRESS SPECIAL EDITION ⚡</div>
+        <div class="mid-subtitle">Zash's 28th birthdagi</div>
+        <div class="bottom-subtitle">ZASH'S 28TH BIRTHDAY FEAST!</div>
     </div>
 
-    <!-- Interactive Status Bar -->
+    <!-- Interactive Status -->
     <div id="mic-status-bar" class="mic-status">
-        🎈 Click 8-bit balloons to pop! 🎤 Click the magical cake to blow out candles with your mic!
+        🎈 Pop balloons! 🎤 Click cake to enable mic & blow out candles!
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL 1: OPEN PRESENT / LETTER CARD        -->
-    <!-- ========================================== -->
+    <!-- Present View Modal -->
     <div id="view-present-modal" class="pixel-modal hidden">
-        <div class="present-card-container wizard-scroll">
+        <div class="present-card-container">
             <div class="card-header-pink">
-                <span class="header-sub">HOGWARTS ACCEPTANCE & GIFT</span>
+                <span class="header-sub">BIRTHDAY GIFT FOR ZASH</span>
                 <h2 id="card-sender-name">From Hagrid</h2>
                 <button class="close-card-x" id="close-view-x">✕</button>
             </div>
             
             <div class="card-content-split">
-                <div class="letter-box parchment">
+                <div class="letter-box">
                     <div class="tab-label">LETTER</div>
-                    <p id="card-letter-text">Yer a wizard! Happee Birthdae!</p>
+                    <p id="card-letter-text">Happee Birthdae Zash!</p>
                 </div>
                 
                 <div class="photo-box">
-                    <div class="tab-label">MAGICAL PHOTO</div>
+                    <div class="tab-label">PHOTO</div>
                     <div class="polaroid-frame">
-                        <img id="card-photo-img" src="" alt="Magical Memory" />
+                        <img id="card-photo-img" src="" alt="Memory" />
                     </div>
                 </div>
             </div>
             
-            <button class="pixel-btn card-close-btn" id="close-card-btn">CLOSE SCROLL</button>
+            <button class="pixel-btn card-close-btn" id="close-card-btn">CLOSE</button>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL 2: LEAVE A PRESENT (WRAPPING STATION)-->
-    <!-- ========================================== -->
+    <!-- Add Present Modal -->
     <div id="create-present-modal" class="pixel-modal hidden">
-        <div class="wrapping-station-box wizard-theme">
+        <div class="wrapping-station-box">
             <div class="station-header">
-                <h3>SPELLBIND WRAPPING STATION</h3>
-                <span class="step-text">STEP 1 OF 1</span>
+                <h3>PICK THE WRAPPING</h3>
+                <span class="step-text">MAGICAL PRESENT</span>
             </div>
 
             <div class="preview-present-display">
                 <div id="wrap-preview-icon" class="big-gift-preview">🎁</div>
-                <div id="wrap-selected-name" class="wrap-name-label">GRYFFINDOR RED</div>
+                <div id="wrap-selected-name" class="wrap-name-label">PARCHMENT & RED RIBBON</div>
             </div>
 
-            <!-- Custom House Color Wrapping Options -->
             <div class="wrap-options-grid">
-                <button class="wrap-option active" data-color="#740001" data-ribbon="#d3a625" data-name="GRYFFINDOR RED">🎁</button>
-                <button class="wrap-option" data-color="#1a472a" data-ribbon="#aaaaaa" data-name="SLYTHERIN GREEN">🎁</button>
-                <button class="wrap-option" data-color="#0e1a40" data-ribbon="#946b2d" data-name="RAVENCLAW BLUE">🎁</button>
-                <button class="wrap-option" data-color="#ecb939" data-ribbon="#000000" data-name="HUFFLEPUFF YELLOW">🎁</button>
-                <button class="wrap-option" data-color="#ff70a6" data-ribbon="#02c39a" data-name="HAGRID SPECIAL">🎁</button>
+                <button class="wrap-option active" data-color="#d4a373" data-ribbon="#800020" data-name="PARCHMENT RED">🎁</button>
+                <button class="wrap-option" data-color="#2a9d8f" data-ribbon="#e9c46a" data-name="SLYTHERIN TEAL">🎁</button>
+                <button class="wrap-option" data-color="#e63946" data-ribbon="#ffffff" data-name="CLASSIC RED">🎁</button>
+                <button class="wrap-option" data-color="#1d3557" data-ribbon="#f4a261" data-name="RAVENCLAW BLUE">🎁</button>
             </div>
 
             <div class="present-form-inputs">
-                <input type="text" id="input-sender" placeholder="Your Wizard Name" maxlength="20" />
-                <textarea id="input-message" placeholder="Write your owl post letter..." rows="3"></textarea>
-                <input type="url" id="input-photo-url" placeholder="Magical Image URL" />
+                <input type="text" id="input-sender" placeholder="Your Name" maxlength="20" />
+                <textarea id="input-message" placeholder="Write message for Zash..." rows="3"></textarea>
+                <input type="url" id="input-photo-url" placeholder="Photo URL" />
             </div>
 
             <div class="station-actions">
                 <button id="cancel-wrap-btn" class="pixel-btn">BACK</button>
-                <button id="submit-wrap-btn" class="pixel-btn highlight-btn">SEND BY OWL 🦉</button>
+                <button id="submit-wrap-btn" class="pixel-btn highlight-btn">SEND GIFT 🦉</button>
             </div>
         </div>
     </div>
