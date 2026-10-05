@@ -8,86 +8,72 @@
 
 body, html {
     width: 100%; height: 100%;
-    background-color: #1a0f07;
+    background-color: #120b06;
     font-family: 'Press Start 2P', monospace;
     display: flex; flex-direction: column;
     justify-content: center; align-items: center;
     overflow: hidden; color: #fff;
 }
 
-#bg-balloons-container {
-    position: fixed; inset: 0; pointer-events: none; z-index: 1;
-}
-
-.bg-balloon {
-    position: absolute; bottom: -80px; font-size: 30px;
-    cursor: pointer; pointer-events: auto;
-    animation: floatUp 11s linear infinite;
-}
-
-@keyframes floatUp {
-    0% { transform: translateY(0); opacity: 0.9; }
-    100% { transform: translateY(-110vh); opacity: 0.2; }
-}
-
-/* Outer Border - Exact Match with Image */
 #outer-frame {
     position: relative; z-index: 2;
-    background: #e1b382; border: 6px solid #6f4e37;
+    background: #d8a272; border: 6px solid #5a3821;
     padding: 10px 14px; border-radius: 4px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     text-align: center; width: 680px; max-width: 96vw;
 }
 
 .top-subtitle, .mid-subtitle, .bottom-subtitle {
-    color: #4a2c11; font-size: 8px; margin: 3px 0;
+    color: #3d2314; font-size: 8px; margin: 3px 0; letter-spacing: 0.5px;
 }
-.bottom-subtitle { font-size: 10px; font-weight: bold; letter-spacing: 1px; }
+.bottom-subtitle { font-size: 11px; font-weight: bold; letter-spacing: 1.5px; }
 
 #game-viewport {
     position: relative; width: 100%; height: 380px;
-    border: 3px solid #3d2314; background: #000; overflow: hidden;
+    border: 3px solid #3d2314; background: #c2c2c2; overflow: hidden;
 }
 
 #room-canvas { width: 100%; height: 100%; display: block; cursor: pointer; }
 
 .leave-gift-btn {
-    position: absolute; bottom: 10px; right: 10px; z-index: 10;
+    position: absolute; bottom: 8px; right: 8px; z-index: 10;
+}
+.mode-btn {
+    position: absolute; top: 8px; left: 8px; z-index: 10; font-size: 6px;
 }
 
 .mic-status {
-    margin-top: 8px; color: #e1b382; font-size: 8px;
-    background: #2d1a0e; padding: 6px 14px; border: 2px solid #6f4e37; border-radius: 4px;
+    margin-top: 8px; color: #d8a272; font-size: 8px;
+    background: #2a160a; padding: 6px 14px; border: 2px solid #5a3821; border-radius: 4px;
 }
 
-/* Modal Styling */
 .pixel-modal {
-    position: fixed; inset: 0; background: rgba(10, 5, 2, 0.85);
+    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
     display: flex; justify-content: center; align-items: center; z-index: 100;
 }
 .pixel-modal.hidden { display: none; }
 
 .present-card-container, .wrapping-station-box {
-    background: #f4e1d2; border: 4px solid #6f4e37;
-    width: 90%; max-width: 460px; padding: 14px; color: #2d1a0e;
+    background: #f4e1d2; border: 4px solid #5a3821;
+    width: 90%; max-width: 440px; padding: 14px; color: #2d1a0e;
 }
 
 .card-header-pink {
-    background: #800020; color: #f4e1d2; border: 2px solid #6f4e37;
+    background: #800020; color: #f4e1d2; border: 2px solid #5a3821;
     text-align: center; padding: 6px; margin-bottom: 10px; position: relative;
 }
-.header-sub { font-size: 7px; color: #e1b382; }
-.card-header-pink h2 { font-size: 13px; margin-top: 2px; }
+.header-sub { font-size: 7px; color: #d8a272; }
+.card-header-pink h2 { font-size: 12px; margin-top: 2px; }
 .close-card-x { position: absolute; top: 4px; right: 8px; background: none; border: none; font-size: 14px; color: #fff; cursor: pointer; }
 
 .card-content-split { display: flex; gap: 10px; margin-bottom: 12px; }
 .letter-box, .photo-box {
     flex: 1; border: 2px solid #b5835a; background: #fffdf9;
-    padding: 8px; position: relative; min-height: 150px;
+    padding: 8px; position: relative; min-height: 140px;
 }
 
 .tab-label {
-    position: absolute; top: -9px; left: 6px; background: #6f4e37;
+    position: absolute; top: -9px; left: 6px; background: #5a3821;
     color: #fff; font-size: 6px; padding: 2px 4px;
 }
 
@@ -96,30 +82,17 @@ body, html {
 }
 
 .polaroid-frame { background: #fff; border: 1px solid #ccc; padding: 3px; margin-top: 6px; }
-.polaroid-frame img { width: 100%; height: 105px; object-fit: cover; }
-
-.station-header h3 { font-size: 10px; color: #800020; }
-.step-text { font-size: 7px; color: #777; }
-
-.preview-present-display {
-    border: 2px solid #b5835a; padding: 8px; margin-bottom: 10px; background: #fffdf9; text-align: center;
-}
-.big-gift-preview { font-size: 34px; }
-.wrap-name-label { font-size: 7px; margin-top: 2px; }
-
-.wrap-options-grid { display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; }
-.wrap-option { font-size: 18px; padding: 4px; border: 2px solid #ccc; background: #fff; cursor: pointer; }
-.wrap-option.active { border-color: #800020; background: #f4e1d2; }
+.polaroid-frame img { width: 100%; height: 100px; object-fit: cover; }
 
 .present-form-inputs input, .present-form-inputs textarea {
     width: 100%; font-family: 'VT323', monospace; font-size: 16px;
-    padding: 5px; margin-bottom: 5px; border: 2px solid #b5835a; outline: none;
+    padding: 6px; margin-bottom: 8px; border: 2px solid #b5835a; outline: none;
 }
 
 .pixel-btn {
     font-family: 'Press Start 2P', monospace; font-size: 7px;
-    color: #fff; background: #6f4e37; border: 2px solid #3d2314;
-    padding: 7px 9px; cursor: pointer; box-shadow: 0 2px 0 #000;
+    color: #fff; background: #5a3821; border: 2px solid #2d1a0e;
+    padding: 7px 10px; cursor: pointer; box-shadow: 0 2px 0 #000;
 }
 .pixel-btn:active { transform: translateY(1px); }
-.highlight-btn { background: #800020; border-color: #e1b382; }
+.highlight-btn { background: #800020; }
