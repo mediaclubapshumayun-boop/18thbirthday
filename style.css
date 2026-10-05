@@ -11,14 +11,15 @@ body, html {
     width: 100%; height: 100%;
     background-color: #120b18;
     font-family: 'Press Start 2P', monospace;
-    display: flex; justify-content: center; align-items: center;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
     overflow: hidden; color: #333;
 }
 
 #game-container {
     position: relative;
     width: 960px; height: 640px;
-    max-width: 100vw; max-height: 100vh;
+    max-width: 100vw; max-height: 85vh;
     border: 4px solid #f687b3;
     box-shadow: 0 0 30px rgba(246, 135, 179, 0.3);
     overflow: hidden;
@@ -26,17 +27,18 @@ body, html {
 
 #room {
     position: absolute; inset: 0;
-    background: linear-gradient(to bottom, #d27993 0%, #a44865 65%, #5c2c19 65%, #3a1a0e 100%);
+    /* Wall pink gradient transition to dark wood paneling & floor */
+    background: linear-gradient(to bottom, #d27993 0%, #a44865 58%, #5c2c19 58%, #3a1a0e 100%);
 }
 
-/* Ceiling & Banner */
+/* Rafters & Garland */
 .rafters {
     position: absolute; top: 0; width: 100%; height: 28px;
     background: repeating-linear-gradient(90deg, #5c2e17, #5c2e17 35px, #3d1b0a 35px, #3d1b0a 70px);
 }
 
 .banner-wrapper {
-    position: absolute; top: 45px; left: 50%; transform: translateX(-50%);
+    position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
     width: 480px; height: 42px; background: #fff;
     border: 4px solid #ff70a6; border-radius: 6px;
     display: flex; align-items: center; justify-content: center;
@@ -45,10 +47,10 @@ body, html {
 
 .bday-banner { font-size: 14px; color: #3a86ff; letter-spacing: 2px; }
 
-/* Window */
+/* Night Window */
 .window {
-    position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
-    width: 250px; height: 170px; border: 6px solid #4a2211; background: #08121e;
+    position: absolute; top: 95px; left: 50%; transform: translateX(-50%);
+    width: 260px; height: 170px; border: 6px solid #4a2211; background: #08121e;
     overflow: hidden; z-index: 1;
 }
 .sky { position: relative; width: 100%; height: 100%; }
@@ -61,17 +63,36 @@ body, html {
 }
 .curtain-l { left: 0; } .curtain-r { right: 0; }
 
-/* Rug & Dining Table Setup (Matches Screenshot 1) */
+/* Left/Right Props & Balloons */
+.wall-left { position: absolute; top: 120px; left: 40px; font-size: 28px; }
+.wall-right { position: absolute; top: 120px; right: 40px; font-size: 28px; }
+
+.balloon {
+    position: absolute; font-size: 32px;
+    animation: float 3s ease-in-out infinite alternate;
+}
+.b-pink { top: 100px; left: 160px; }
+.b-orange { top: 150px; left: 200px; animation-delay: 0.5s; }
+.b-purple { top: 100px; right: 200px; animation-delay: 1s; }
+.b-blue { top: 140px; right: 160px; animation-delay: 1.5s; }
+.b-green { top: 180px; right: 120px; animation-delay: 0.8s; }
+
+@keyframes float {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-12px); }
+}
+
+/* Rug & Center Dining Table Setup */
 .blue-rug {
-    position: absolute; bottom: 75px; left: 50%; transform: translateX(-50%);
-    width: 600px; height: 210px; background: #2b5c8f;
+    position: absolute; bottom: 65px; left: 50%; transform: translateX(-50%);
+    width: 620px; height: 210px; background: #2b5c8f;
     border: 6px solid #ffffff; border-radius: 8px;
     box-shadow: inset 0 0 0 4px #1b3a5c;
     display: flex; justify-content: center; align-items: center;
 }
 
 .table {
-    position: relative; width: 420px; height: 95px;
+    position: relative; width: 440px; height: 100px;
     background: repeating-linear-gradient(45deg, #ff477e, #ff477e 16px, #ffffff 16px, #ffffff 32px);
     border: 4px solid #ab2d53; display: flex; justify-content: center; align-items: center;
     z-index: 3;
@@ -79,28 +100,41 @@ body, html {
 
 .table-feast { display: flex; align-items: center; gap: 20px; font-size: 28px; }
 
-.cake { position: relative; cursor: pointer; }
-.candles { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 12px; }
+.cake { position: relative; cursor: pointer; transition: transform 0.2s; }
+.cake:hover { transform: scale(1.1); }
 
-.chair { position: absolute; font-size: 30px; z-index: 2; }
-.chair-l { left: -40px; } .chair-r { right: -40px; }
-.chair-f1 { bottom: -30px; left: 150px; z-index: 4; }
-.chair-f2 { bottom: -30px; right: 150px; z-index: 4; }
+.candles {
+    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 4px; font-size: 14px;
+}
+
+.chair { position: absolute; font-size: 32px; z-index: 2; }
+.chair-l { left: -45px; } .chair-r { right: -45px; }
+.chair-f1 { bottom: -32px; left: 160px; z-index: 4; }
+.chair-f2 { bottom: -32px; right: 160px; z-index: 4; }
 
 .cat {
     position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
     font-size: 26px; z-index: 5;
 }
 
-.gift-stack { position: absolute; bottom: 50px; display: flex; gap: 8px; z-index: 5; }
-.gift-stack-left { left: 35px; } .gift-stack-right { right: 35px; }
+/* Stacks of Gifts on Floor */
+.gift-stack { position: absolute; bottom: 40px; display: flex; gap: 8px; z-index: 5; }
+.gift-stack-left { left: 40px; } .gift-stack-right { right: 40px; }
 
-.gift-item { font-size: 36px; cursor: pointer; transition: transform 0.2s; }
-.gift-item:hover { transform: scale(1.15); }
+.gift-item { font-size: 38px; cursor: pointer; transition: transform 0.2s; }
+.gift-item:hover { transform: scale(1.2); }
 
-/* --- MODAL 1: VIEW PRESENT CARD (IMAGE 3 RECREATION) --- */
+/* Status bar for mic */
+.mic-status {
+    margin-top: 10px; color: #ff70a6; font-size: 10px;
+    text-align: center; background: #22122b; padding: 8px 16px;
+    border: 2px solid #ff70a6; border-radius: 4px;
+}
+
+/* --- MODAL 1: VIEW PRESENT CARD --- */
 .pixel-modal {
-    position: fixed; inset: 0; background: rgba(10, 5, 15, 0.8);
+    position: fixed; inset: 0; background: rgba(10, 5, 15, 0.85);
     display: flex; justify-content: center; align-items: center; z-index: 100;
 }
 .pixel-modal.hidden { display: none; }
@@ -142,7 +176,7 @@ body, html {
 }
 .polaroid-frame img { width: 100%; height: 130px; object-fit: cover; }
 
-/* --- MODAL 2: WRAPPING STATION (IMAGE 2 RECREATION) --- */
+/* --- MODAL 2: WRAPPING STATION --- */
 .wrapping-station-box {
     background: #fff; border: 4px solid #ff70a6; width: 90%; max-width: 460px;
     padding: 20px; text-align: center; border-radius: 6px;
@@ -165,10 +199,10 @@ body, html {
 
 .present-form-inputs input, .present-form-inputs textarea {
     width: 100%; font-family: 'VT323', monospace; font-size: 18px;
-    padding: 8px; margin-bottom: 8px; border: 2px solid #ccc;
+    padding: 8px; margin-bottom: 8px; border: 2px solid #ccc; outline: none;
 }
 
-/* Button UI */
+/* UI Buttons */
 .pixel-btn {
     font-family: 'Press Start 2P', monospace; font-size: 9px;
     color: #fff; background: #7b2cbf; border: 3px solid #ff70a6;
@@ -177,5 +211,3 @@ body, html {
 .pixel-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #000; }
 .highlight-btn { background: #ff477e; border-color: #ffea00; }
 .leave-gift-btn { position: absolute; bottom: 15px; right: 15px; z-index: 10; }
-.audio-toggle { position: fixed; top: 15px; right: 15px; z-index: 10; }
-.simple-pixel-dialog { background: #2b1035; color: #fff; padding: 20px; border: 4px solid #ff70a6; text-align: center; }
