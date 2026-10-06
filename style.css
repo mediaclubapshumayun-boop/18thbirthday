@@ -84,15 +84,15 @@ header h1 {
     image-rendering: pixelated;
 }
 
-/* Perfect Balanced Cake Size */
+/* Perfect Slightly Bigger Cake Size */
 .cake-wrapper {
     position: absolute;
     top: 48.5%;
     left: 50.5%;
     transform: translate(-50%, -50%);
-    width: 17%; /* Reduced for ideal proportions */
-    max-width: 135px;
-    min-width: 90px;
+    width: 22%; /* Increased for better visibility */
+    max-width: 175px;
+    min-width: 110px;
     z-index: 5;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -123,7 +123,7 @@ header h1 {
 .candle-flame {
     position: absolute;
     width: 6px;
-    height: 10px;
+    height: 11px;
     background: radial-gradient(circle, #ffffff 15%, #ffcc00 50%, #ff3300 90%);
     border-radius: 50% 50% 20% 20%;
     box-shadow: 0 0 6px #ff9900, 0 0 10px #ffcc00;
@@ -184,7 +184,7 @@ header h1 {
 /* Balanced Balloon Size & Positioning */
 .interactive.balloon {
     position: absolute;
-    width: 60px; /* Perfectly visible size */
+    width: 60px;
     height: auto;
     cursor: pointer;
     z-index: 6;
