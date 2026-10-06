@@ -15,28 +15,78 @@
 
         <div class="controls">
             <button id="micBtn" class="pixel-button">🎤 Enable Mic to Blow Candles</button>
-            <p id="micStatus" class="mic-status">Click button to enable mic</p>
+            <p id="micStatus" class="mic-status">Click button to enable mic or tap the cake directly!</p>
         </div>
 
-        <!-- Main Scene Container using your Image -->
+        <!-- Main Scene Container -->
         <div class="scene-container">
-            <img src="bg.jpg" alt="Harry Potter Birthday Room" id="bgImage">
-            
-            <!-- Flame Overlays (Will hide when blown) -->
-            <div class="candle-flame" style="top: 36%; left: 47%;"></div>
-            <div class="candle-flame" style="top: 36%; left: 49%;"></div>
-            <div class="candle-flame" style="top: 36%; left: 51%;"></div>
+            <img src="assets/bg.jpg" alt="Harry Potter Birthday Room" id="bgImage">
 
-            <!-- Clickable Interactive Areas -->
-            <div class="interactive balloon" id="balloon1" style="top: 17%; left: 26%;" data-name="Purple Balloon"></div>
-            <div class="interactive balloon" id="balloon2" style="top: 25%; left: 29%;" data-name="Yellow Balloon"></div>
-            <div class="interactive balloon" id="balloon3" style="top: 19%; left: 67%;" data-name="Purple Balloon"></div>
-            <div class="interactive balloon" id="balloon4" style="top: 25%; left: 70%;" data-name="Red Heart Balloon"></div>
-            <div class="interactive balloon" id="balloon5" style="top: 32%; left: 75%;" data-name="Green Balloon"></div>
+            <!-- Cake in Center Table -->
+            <div class="cake-wrapper" id="cakeContainer" title="Click to blow candles!">
+                <img src="assets/cake.png" alt="Birthday Cake" class="cake-image">
+                
+                <!-- Candle Flames mapped to cake candles -->
+                <div class="flame-group">
+                    <div class="candle-flame" style="top: 8%; left: 49.5%;"></div>
+                    <div class="candle-flame" style="top: 41%; left: 34.5%;"></div>
+                    <div class="candle-flame" style="top: 45%; left: 43.2%;"></div>
+                    <div class="candle-flame" style="top: 47%; left: 50.8%;"></div>
+                    <div class="candle-flame" style="top: 45%; left: 58.2%;"></div>
+                    <div class="candle-flame" style="top: 41%; left: 66.0%;"></div>
+                </div>
 
-            <div class="interactive gift" id="gift1" style="top: 63%; left: 20%;" data-wish="✨ May your 28th year be filled with pure magic, joy, and endless spells of victory!"></div>
-            <div class="interactive gift" id="gift2" style="top: 42%; left: 34%;" data-wish="🦉 A special Hogwarts owl brought this: Have a fantastic and happy Birthday Zash!"></div>
-            <div class="interactive gift" id="gift3" style="top: 60%; left: 75%;" data-wish="⚡ Accio happiness! May all your dreams and magical ambitions come true this year!"></div>
+                <!-- Smoke Animation Element -->
+                <div class="smoke-container" id="smokeEffect">
+                    <div class="smoke-puff"></div>
+                    <div class="smoke-puff"></div>
+                    <div class="smoke-puff"></div>
+                </div>
+            </div>
+
+            <!-- Floating Interactive Balloons -->
+            <div class="interactive balloon float-1" id="balloon1" style="top: 12%; left: 15%;"></div>
+            <div class="interactive balloon float-2" id="balloon2" style="top: 22%; left: 8%;"></div>
+            <div class="interactive balloon float-3" id="balloon3" style="top: 35%; left: 18%;"></div>
+            <div class="interactive balloon float-1" id="balloon4" style="top: 12%; left: 78%;"></div>
+            <div class="interactive balloon float-2" id="balloon5" style="top: 24%; left: 86%;"></div>
+            <div class="interactive balloon float-3" id="balloon6" style="top: 38%; left: 76%;"></div>
+
+            <!-- 8 Interactive Gift Boxes -->
+            <div class="gift-grid">
+                <div class="gift-box" id="gift1" data-wish="✨ May your 18th year be filled with pure magic, joy, and endless spells of victory!">
+                    <div class="gift-lid">🎁</div>
+                    <div class="gift-label">Gift #1</div>
+                </div>
+                <div class="gift-box" id="gift2" data-wish="🦉 A special Hogwarts owl brought this: Have a fantastic 18th Birthday Zash!">
+                    <div class="gift-lid">🎁</div>
+                    <div class="gift-label">Gift #2</div>
+                </div>
+                <div class="gift-box" id="gift3" data-wish="⚡ Accio happiness! May all your dreams and magical ambitions come true this year!">
+                    <div class="gift-lid">🎁</div>
+                    <div class="gift-label">Gift #3</div>
+                </div>
+                <div class="gift-box" id="gift4" data-wish="🏆 100 points to Gryffindor for being an amazing friend! Happy 18th Birthday!">
+                    <div class="gift-lid">🎁</div>
+                    <div class="gift-label">Gift #4</div>
+                </div>
+                <div class="gift-box" id="gift5" data-wish="🧪 Wishing you a year brewed with success, good health, and wonderful adventures!">
+                    <div class="gift-lid">🎁</div>
+                    <div class="gift-label">Gift #5</div>
+                </div>
+                <div class="gift-box" id="gift6" data-wish="🧹 May you fly high toward your ultimate goals and catch every Golden Snitch in life!">
+                    <div class="gift-lid">🎁</div>
+                    <div class="gift-label">Gift #6</div>
+                </div>
+                <div class="gift-box" id="gift7" data-wish="🔮 The Marauder's Map reveals: A grand year of happiness lies ahead for Zash!">
+                    <div class="gift-lid">🎁</div>
+                    <div class="gift-label">Gift #7</div>
+                </div>
+                <div class="gift-box" id="gift8" data-wish="🌟 Mischief Managed! Cheers to 18 years of incredible memories and many more to come!">
+                    <div class="gift-lid">🎁</div>
+                    <div class="gift-label">Gift #8</div>
+                </div>
+            </div>
         </div>
 
         <!-- Wish Modal -->
@@ -49,7 +99,7 @@
         </div>
 
         <footer>
-            <p>Click Balloons to Pop | Click Gifts to Open | Blow Mic to Blow Candles</p>
+            <p>Click Balloons to Pop | Click Gifts to Open | Blow Mic or Click Cake to Blow Candles</p>
         </footer>
     </div>
     <script src="script.js"></script>
