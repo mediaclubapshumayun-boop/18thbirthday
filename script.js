@@ -1,343 +1,288 @@
-const canvas = document.getElementById("room-canvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('roomCanvas');
+const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
 
+// Audio / Mic Variables
+let audioContext;
+let analyser;
+let microphone;
+let isMicActive = false;
 let candlesLit = true;
-let activeFlames = [true, true, true, true, true];
-let selectedColor = "#d4a373";
-let selectedRibbon = "#800020";
-let selectedName = "PARCHMENT RED";
 
-// Room Balloons
-let roomBalloons = [
-    { x: 190, y: 110, color: "#800020", popped: false }, // Dark Red
-    { x: 210, y: 135, color: "#f4a261", popped: false }, // Yellow
-    { x: 440, y: 110, color: "#7b2cbf", popped: false }, // Purple
-    { x: 460, y: 130, color: "#e63946", popped: false }, // Red
-    { x: 495, y: 160, color: "#2a9d8f", popped: false }  // Green
+// Balloons State
+let balloons = [
+  { id: 1, x: 220, y: 190, radius: 18, color: '#9b59b6', popped: false },
+  { id: 2, x: 250, y: 220, radius: 16, color: '#f1c40f', popped: false },
+  { id: 3, x: 570, y: 200, radius: 18, color: '#e74c3c', popped: false },
+  { id: 4, x: 600, y: 230, radius: 16, color: '#2ecc71', popped: false }
 ];
 
-// Exact Presents Layout from First Image
-let presents = [
-    { id: 1, sender: "Hagrid", message: "Bak'd it meself! Happee Birthdae Zash!", photoUrl: "https://picsum.photos/id/1025/300/200", color: "#d4a373", ribbon: "#800020", x: 215, y: 185, w: 26, h: 26 }, // On Left Chair
-    { id: 2, sender: "Ron & Hermione", message: "Happy 28th Birthday Zash!", photoUrl: "https://picsum.photos/id/237/300/200", color: "#d4a373", ribbon: "#800020", x: 135, y: 245, w: 28, h: 28 }, // Left Floor
-    { id: 3, sender: "Dumbledore", message: "Have a magical 28th birthday feast!", photoUrl: "", color: "#d4a373", ribbon: "#1d3557", x: 485, y: 235, w: 28, h: 28 } // Right Floor
+// Gifts State & Wishes
+let gifts = [
+  { id: 1, x: 200, y: 390, width: 35, height: 35, opened: false, wish: "✨ May your 28th year be filled with pure magic, joy, and endless spells of victory!" },
+  { id: 2, x: 310, y: 350, width: 30, height: 30, opened: false, wish: "🦉 A special Hogwarts owl brought this: Have a fantastic and happy Birthday Zash!" },
+  { id: 3, x: 580, y: 380, width: 40, height: 35, opened: false, wish: "⚡ Accio happiness! May all your dreams and magical ambitions come true this year!" }
 ];
 
-function playPopSound() {
-    try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = "square";
-        osc.frequency.setValueAtTime(550, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.08);
-    } catch(e){}
-}
+// Floating Cake Candles
+let cakeCandles = [
+  { x: 380, y: 225 },
+  { x: 390, y: 222 },
+  { x: 400, y: 220 },
+  { x: 410, y: 222 },
+  { x: 420, y: 225 }
+];
 
-// MAIN RENDER LOOP (EXACT MATCH TO GEMINI GENERATED IMAGE 1)
-function drawPixelRoom() {
-    ctx.imageSmoothingEnabled = false;
+let particles = [];
 
-    // 1. Wooden Wall Panels
-    ctx.fillStyle = "#6f4e37"; ctx.fillRect(0, 0, 640, 175);
-    ctx.fillStyle = "#523724"; ctx.fillRect(0, 175, 640, 30);
-    ctx.fillStyle = "#3d2314"; for(let x=0; x<640; x+=20) ctx.fillRect(x, 175, 2, 30);
-
-    // Ceiling Beams
-    ctx.fillStyle = "#3d2314"; ctx.fillRect(0, 0, 640, 18);
-    for(let x=0; x<640; x+=30) ctx.fillRect(x, 0, 12, 18);
-
-    // Center Lantern
-    ctx.fillStyle = "#f4a261"; ctx.fillRect(312, 16, 16, 18);
-    ctx.strokeStyle = "#6f4e37"; ctx.strokeRect(312, 16, 16, 18);
-
-    // 2. House Banners & Potions Ceiling Strings
-    const houseColors = ["#800020", "#1d3557", "#2a9d8f", "#800020", "#1d3557", "#2a9d8f"];
-    for(let i=0; i<6; i++) {
-        drawPennantBanner(20 + i*32, 18, houseColors[i]);
-        drawPennantBanner(410 + i*32, 18, houseColors[i]);
-    }
-
-    // Snitches & Floating Potions
-    drawSnitch(210, 25); drawPotion(245, 22, "#7b2cbf");
-    drawPotion(390, 22, "#2a9d8f"); drawSnitch(425, 25);
-
-    // Floating Candles
-    drawFloatingCandle(60, 95); drawFloatingCandle(85, 80); drawFloatingCandle(105, 80);
-    drawFloatingCandle(280, 45); drawFloatingCandle(360, 45);
-    drawFloatingCandle(535, 80); drawFloatingCandle(555, 95); drawFloatingCandle(580, 80);
-
-    // 3. Center Window View
-    ctx.fillStyle = "#3d2314"; ctx.fillRect(225, 38, 190, 125);
-    ctx.fillStyle = "#0d1b2a"; ctx.fillRect(231, 44, 178, 113);
+// Initialize Microphone Input
+async function initMicrophone() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    microphone = audioContext.createMediaStreamSource(stream);
+    microphone.connect(analyser);
+    analyser.fftSize = 256;
     
-    // Moon & Castle Silhouette
-    ctx.fillStyle = "#e0e1dd"; ctx.beginPath(); ctx.arc(280, 65, 10, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = "#1b263b"; ctx.fillRect(231, 115, 178, 42); // Castle distant
-
-    // Window Frames & Curtains
-    ctx.fillStyle = "#3d2314"; ctx.fillRect(319, 44, 2, 113); ctx.fillRect(231, 95, 178, 2);
-    ctx.fillStyle = "#5c061c"; ctx.fillRect(225, 38, 22, 125); ctx.fillRect(393, 38, 22, 125);
-
-    // 4. Center Banner "Zash's 28th Birthday Feast!"
-    ctx.fillStyle = "#f4e1d2"; ctx.fillRect(200, 25, 240, 24);
-    ctx.strokeStyle = "#6f4e37"; ctx.lineWidth = 2; ctx.strokeRect(200, 25, 240, 24);
-    ctx.fillStyle = "#3d2314"; ctx.font = "8px 'Press Start 2P'"; ctx.textAlign = "center";
-    ctx.fillText("Zash's 28th Birthday Feast!", 320, 40);
-
-    // 5. Side Props (Frames, Photo Booth, Shelf)
-    // Left Frames & Photo Booth
-    ctx.fillStyle = "#2a9d8f"; ctx.fillRect(135, 80, 14, 14);
-    ctx.fillStyle = "#e63946"; ctx.fillRect(135, 100, 14, 14);
-    ctx.fillStyle = "#6f4e37"; ctx.fillRect(122, 125, 26, 32); // Photo Booth
-    ctx.fillStyle = "#000000"; ctx.fillRect(126, 138, 18, 10);
-    ctx.fillStyle = "#ffffff"; ctx.font = "5px 'Press Start 2P'"; ctx.fillText("Hogwarts", 135, 145);
-
-    // Right Plant Shelf & Potions
-    ctx.fillStyle = "#3d2314"; ctx.fillRect(490, 100, 42, 4);
-    ctx.fillStyle = "#2a9d8f"; ctx.fillRect(495, 88, 8, 12);
-
-    // 6. Balloons
-    roomBalloons.forEach(b => {
-        if (!b.popped) draw8BitBalloon(b.x, b.y, b.color);
-    });
-
-    // 7. Wooden Floor & Blue Hogwarts Crest Rug
-    ctx.fillStyle = "#a06d3b"; ctx.fillRect(0, 205, 640, 175);
-    ctx.fillStyle = "#805327"; for(let y=205; y<380; y+=16) ctx.fillRect(0, y, 640, 2);
-
-    // Blue Rug with Gold Crest Icons
-    ctx.fillStyle = "#1d3557"; ctx.fillRect(145, 225, 350, 120);
-    ctx.strokeStyle = "#e9c46a"; ctx.lineWidth = 3; ctx.strokeRect(149, 229, 342, 112);
-    drawGoldCrest(170, 245); drawGoldCrest(450, 245);
-
-    // 8. Chairs with Shield Crests
-    drawChair(195, 200, "#800020"); drawChair(415, 200, "#1d3557");
-    drawFrontChair(245, 305, "#800020"); drawFrontChair(365, 305, "#1d3557");
-
-    // 9. Table & Marauder's Map Pattern
-    ctx.fillStyle = "#f4e1d2"; ctx.fillRect(220, 210, 200, 80);
-    ctx.strokeStyle = "#b5835a"; ctx.lineWidth = 1; ctx.strokeRect(220, 210, 200, 80);
-    
-    // Cupcake Tier Stand
-    ctx.fillStyle = "#e9c46a"; ctx.fillRect(280, 215, 16, 20);
-    ctx.fillText("🧁", 288, 225);
-
-    // 10. Pink Hagrid Cake "HAPPEE BIRTHDAE ZASH"
-    drawPinkHagridCake(320, 215);
-
-    // 11. Black Cat (Bottom Right Floor)
-    drawBlackCat(495, 315);
-
-    // 12. Presents
-    drawPresents();
+    isMicActive = true;
+    document.getElementById('micStatusText').innerText = "Mic Active! Blow now!";
+    document.getElementById('micBtn').style.display = 'none';
+    listenForBlow();
+  } catch (err) {
+    alert("Microphone permission denied or not supported.");
+    document.getElementById('micStatusText').innerText = "Mic Permission Denied";
+  }
 }
 
-function drawPennantBanner(x, y, color) {
-    ctx.fillStyle = color; ctx.fillRect(x, y, 14, 20);
-    ctx.beginPath(); ctx.moveTo(x, y+20); ctx.lineTo(x+7, y+26); ctx.lineTo(x+14, y+20); ctx.fill();
+// Detect Blowing Sound
+function listenForBlow() {
+  if (!isMicActive || !candlesLit) return;
+
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(dataArray);
+
+  let sum = 0;
+  for (let i = 0; i < dataArray.length; i++) {
+    sum += dataArray[i];
+  }
+  let average = sum / dataArray.length;
+
+  // Threshold for blowing sound
+  if (average > 45) {
+    candlesLit = false;
+    document.getElementById('micStatusText').innerText = "🎉 Candles Blown Out!";
+  } else {
+    requestAnimationFrame(listenForBlow);
+  }
 }
 
-function drawSnitch(x, y) {
-    ctx.fillStyle = "#e9c46a"; ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = "#ffffff"; ctx.fillRect(x-6, y-2, 4, 2); ctx.fillRect(x+2, y-2, 4, 2);
-}
+document.getElementById('micBtn').addEventListener('click', initMicrophone);
 
-function drawPotion(x, y, color) {
-    ctx.fillStyle = color; ctx.fillRect(x, y+4, 8, 8);
-    ctx.fillStyle = "#d4a373"; ctx.fillRect(x+2, y, 4, 4);
-}
+// Main Canvas Drawing Loop
+function drawScene() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-function drawFloatingCandle(x, y) {
-    ctx.fillStyle = "#fffdf9"; ctx.fillRect(x, y, 3, 10);
-    ctx.fillStyle = "#f4a261"; ctx.fillRect(x-1, y-4, 5, 4);
-}
+  // 1. Room Background & Wooden Floor
+  ctx.fillStyle = '#5c2d12';
+  ctx.fillRect(0, 0, 800, 330);
+  ctx.fillStyle = '#3a1a09';
+  ctx.fillRect(0, 330, 800, 170);
 
-function draw8BitBalloon(x, y, color) {
-    ctx.fillStyle = color; ctx.fillRect(x-6, y-8, 12, 16); ctx.fillRect(x-8, y-6, 16, 12);
-    ctx.fillStyle = "#ffffff"; ctx.fillRect(x-4, y-6, 3, 3);
-    ctx.fillStyle = color; ctx.fillRect(x-2, y+8, 4, 2);
-    ctx.strokeStyle = "#e9c46a"; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(x, y+10); ctx.quadraticCurveTo(x-4, y+18, x, y+24); ctx.stroke();
-}
+  // Floor Planks
+  ctx.strokeStyle = '#251004';
+  ctx.lineWidth = 2;
+  for (let y = 330; y < 500; y += 22) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(800, y);
+    ctx.stroke();
+  }
 
-function drawGoldCrest(x, y) {
-    ctx.fillStyle = "#e9c46a"; ctx.fillRect(x, y, 12, 12);
-}
+  // 2. Arch Window
+  ctx.fillStyle = '#0f172a';
+  ctx.fillRect(280, 40, 240, 200);
+  ctx.fillStyle = '#fef08a';
+  ctx.beginPath();
+  ctx.arc(340, 90, 18, 0, Math.PI * 2);
+  ctx.fill();
 
-function drawChair(x, y, houseColor) {
-    ctx.fillStyle = "#3d2314"; ctx.fillRect(x, y, 22, 38);
-    ctx.fillStyle = houseColor; ctx.fillRect(x+4, y+8, 14, 8);
-}
+  // Curtains
+  ctx.fillStyle = '#580d18';
+  ctx.fillRect(255, 30, 30, 220);
+  ctx.fillRect(515, 30, 30, 220);
 
-function drawFrontChair(x, y, houseColor) {
-    ctx.fillStyle = "#3d2314"; ctx.fillRect(x, y, 24, 18);
-    ctx.fillStyle = houseColor; ctx.fillRect(x+8, y-3, 8, 8);
-}
+  // Window Grids
+  ctx.strokeStyle = '#3a1a09';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(280, 40, 240, 200);
 
-function drawPinkHagridCake(x, y) {
-    // Pink Frosting Cake Body
-    ctx.fillStyle = "#e63946"; ctx.fillRect(x, y+10, 48, 22);
-    ctx.fillStyle = "#ff70a6"; ctx.fillRect(x, y+10, 48, 6);
+  // 3. Banner
+  ctx.fillStyle = '#ebd2b0';
+  ctx.fillRect(210, 65, 380, 45);
+  ctx.strokeStyle = '#6b3a19';
+  ctx.strokeRect(210, 65, 380, 45);
+  ctx.fillStyle = '#2b1405';
+  ctx.font = '11px "Press Start 2P"';
+  ctx.textAlign = 'center';
+  ctx.fillText("Zash's 28th Birthday Feast!", 400, 92);
 
-    // Green Cracked Letters Text "HAPPEE BIRTHDAE ZASH"
-    ctx.fillStyle = "#2a9d8f";
-    ctx.fillRect(x+6, y+18, 36, 2);
-    ctx.fillRect(x+10, y+24, 28, 2);
+  // 4. Rug
+  ctx.fillStyle = '#173863';
+  ctx.fillRect(180, 320, 440, 150);
+  ctx.strokeStyle = '#d6a011';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(185, 325, 430, 140);
 
-    // 5 Lit Candles
-    for(let i=0; i<5; i++) {
-        let cx = x + 6 + i * 9;
-        ctx.fillStyle = "#fffdf9"; ctx.fillRect(cx, y, 2, 10);
+  // 5. Table & Chairs
+  ctx.fillStyle = '#d6b88d';
+  ctx.fillRect(260, 250, 280, 90);
+  ctx.fillStyle = '#4a250e';
+  ctx.fillRect(270, 340, 18, 40);
+  ctx.fillRect(512, 340, 18, 40);
 
-        if (candlesLit && activeFlames[i]) {
-            ctx.fillStyle = Math.random() > 0.4 ? "#f4a261" : "#e63946";
-            ctx.fillRect(cx - 1, y - 4 + Math.floor(Math.random()*2), 4, 4);
-        } else {
-            ctx.fillStyle = "#8d99ae"; ctx.fillRect(cx - 1, y - 4 - Math.floor(Math.random()*2), 3, 3);
-        }
+  ctx.fillStyle = '#5c2d12';
+  ctx.fillRect(215, 260, 30, 80);
+  ctx.fillRect(555, 260, 30, 80);
+
+  // 6. Cake
+  ctx.fillStyle = '#e6739f';
+  ctx.fillRect(360, 230, 80, 40);
+  ctx.fillStyle = '#4a250e';
+  ctx.fillRect(360, 250, 80, 20);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '5px "Press Start 2P"';
+  ctx.fillText("HAPPEE", 400, 240);
+  ctx.fillText("BIRTHDAE", 400, 248);
+  ctx.fillText("ZASH", 400, 256);
+
+  // 7. Cake Candles
+  const time = Date.now() * 0.005;
+  cakeCandles.forEach((c) => {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(c.x, c.y, 4, 10);
+
+    if (candlesLit) {
+      // Animated Flame
+      ctx.fillStyle = '#ff9900';
+      ctx.beginPath();
+      ctx.arc(c.x + 2, c.y - 3, 3 + Math.sin(time * 4) * 0.8, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Smoke Effect when blown out
+      ctx.fillStyle = 'rgba(180, 180, 180, 0.6)';
+      ctx.fillRect(c.x + 1, c.y - 5 - (Math.sin(time) * 3), 2, 4);
     }
-}
+  });
 
-function drawBlackCat(x, y) {
-    ctx.fillStyle = "#111111"; ctx.fillRect(x, y, 16, 12); ctx.fillRect(x+10, y-6, 7, 7);
-    ctx.fillStyle = "#e9c46a"; ctx.fillRect(x+11, y-5, 2, 2); ctx.fillRect(x+14, y-5, 2, 2);
-    ctx.fillStyle = "#111111"; ctx.fillRect(x+16, y+2, 4, 8); // Tail UP
-}
+  // 8. Balloons Rendering
+  balloons.forEach((b) => {
+    if (!b.popped) {
+      let floatY = b.y + Math.sin(time + b.id) * 3;
+      // String
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(b.x, floatY + b.radius);
+      ctx.lineTo(b.x, floatY + b.radius + 30);
+      ctx.stroke();
 
-function drawPresents() {
-    presents.forEach(p => {
-        ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.w, p.h);
-        ctx.fillStyle = p.ribbon;
-        ctx.fillRect(p.x + Math.floor(p.w/2) - 2, p.y, 4, p.h);
-        ctx.fillRect(p.x, p.y + Math.floor(p.h/2) - 2, p.w, 4);
-    });
-}
-
-// Interactivity
-canvas.addEventListener("click", (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const clickX = (e.clientX - rect.left) * scaleX;
-    const clickY = (e.clientY - rect.top) * scaleY;
-
-    roomBalloons.forEach(b => {
-        if (!b.popped && Math.hypot(clickX - b.x, clickY - b.y) <= 12) {
-            b.popped = true; playPopSound();
-        }
-    });
-
-    if (clickX >= 315 && clickX <= 375 && clickY >= 200 && clickY <= 245) {
-        if (!candlesLit) {
-            candlesLit = true; activeFlames = [true, true, true, true, true];
-            document.getElementById("mic-status-bar").innerText = "🕯️ Candles relit! Blow into mic to extinguish!";
-        } else {
-            initMicrophone();
-        }
+      // Balloon body
+      ctx.fillStyle = b.color;
+      ctx.beginPath();
+      ctx.arc(b.x, floatY, b.radius, 0, Math.PI * 2);
+      ctx.fill();
     }
+  });
 
-    presents.forEach(p => {
-        if (clickX >= p.x && clickX <= p.x + p.w && clickY >= p.y && clickY <= p.y + p.h) {
-            openViewModal(p);
-        }
-    });
+  // 9. Gifts Rendering
+  gifts.forEach((g) => {
+    ctx.fillStyle = g.opened ? '#8c501c' : '#bdc3c7';
+    ctx.fillRect(g.x, g.y, g.width, g.height);
+
+    if (!g.opened) {
+      // Gift Box Color & Ribbon
+      ctx.fillStyle = '#d35400';
+      ctx.fillRect(g.x, g.y, g.width, g.height);
+      ctx.fillStyle = '#f1c40f';
+      ctx.fillRect(g.x + g.width / 2 - 2, g.y, 4, g.height);
+      ctx.fillRect(g.x, g.y + g.height / 2 - 2, g.width, 4);
+    } else {
+      // Open Box Top
+      ctx.fillStyle = '#7f8c8d';
+      ctx.fillRect(g.x - 2, g.y - 6, g.width + 4, 6);
+    }
+  });
+
+  // 10. Particles Animation (Sparks/Pops)
+  particles.forEach((p, index) => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 0.03;
+    ctx.fillStyle = p.color || `#ffd700`;
+    ctx.fillRect(p.x, p.y, p.size, p.size);
+
+    if (p.life <= 0) particles.splice(index, 1);
+  });
+
+  requestAnimationFrame(drawScene);
+}
+
+// Click Interactions: Balloon Pop & Gift Open
+canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const clickY = e.clientY - rect.top;
+
+  // 1. Check Balloon Clicks
+  balloons.forEach((b) => {
+    if (!b.popped) {
+      const dist = Math.hypot(clickX - b.x, clickY - b.y);
+      if (dist < b.radius + 5) {
+        b.popped = true;
+        createPopParticles(b.x, b.y, b.color);
+      }
+    }
+  });
+
+  // 2. Check Gift Clicks
+  gifts.forEach((g) => {
+    if (clickX >= g.x && clickX <= g.x + g.width &&
+        clickY >= g.y && clickY <= g.y + g.height) {
+      g.opened = true;
+      showWishModal(g.wish);
+    }
+  });
 });
 
-function spawnBackgroundBalloons() {
-    const container = document.getElementById("bg-balloons-container");
-    const icons = ["🎈", "⚡", "🦉", "✨", "🎁"];
-    for (let i = 0; i < 7; i++) {
-        const balloon = document.createElement("div");
-        balloon.className = "bg-balloon";
-        balloon.innerText = icons[i % icons.length];
-        balloon.style.left = `${Math.random() * 90 + 5}%`;
-        balloon.style.animationDelay = `${Math.random() * 8}s`;
-        balloon.onclick = () => { playPopSound(); balloon.remove(); };
-        container.appendChild(balloon);
-    }
+// Create POP Particle Effect
+function createPopParticles(x, y, color) {
+  for (let i = 0; i < 15; i++) {
+    particles.push({
+      x: x, y: y,
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 0.5) * 6,
+      size: Math.random() * 4 + 2,
+      color: color,
+      life: 1.0
+    });
+  }
 }
 
-function initMicrophone() {
-    const status = document.getElementById("mic-status-bar");
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        extinguishCandles(); return;
-    }
-    status.innerText = "🌬️ Mic Active! Blow hard to extinguish candles!";
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const mic = audioCtx.createMediaStreamSource(stream);
-        const analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256; mic.connect(analyser);
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+// Wish Modal Logic
+const modal = document.getElementById('wishModal');
+const wishText = document.getElementById('wishText');
+const closeModal = document.getElementById('closeModal');
 
-        function listen() {
-            if (!candlesLit) return;
-            analyser.getByteFrequencyData(dataArray);
-            let avg = dataArray.reduce((a,b)=>a+b, 0) / dataArray.length;
-            if (avg > 35) {
-                extinguishCandles();
-                status.innerText = "⚡ Candles blown out!";
-                stream.getTracks().forEach(t => t.stop());
-                return;
-            }
-            requestAnimationFrame(listen);
-        }
-        listen();
-    }).catch(() => extinguishCandles());
+function showWishModal(wish) {
+  wishText.innerText = wish;
+  modal.classList.remove('hidden');
 }
 
-function extinguishCandles() {
-    let idx = 0;
-    let timer = setInterval(() => {
-        if (idx < activeFlames.length) activeFlames[idx++] = false;
-        else { candlesLit = false; clearInterval(timer); }
-    }, 120);
-}
-
-function openViewModal(p) {
-    document.getElementById("card-sender-name").innerText = p.sender;
-    document.getElementById("card-letter-text").innerText = p.message;
-    const img = document.getElementById("card-photo-img");
-    if (p.photoUrl) { img.src = p.photoUrl; img.parentElement.style.display = "block"; }
-    else img.parentElement.style.display = "none";
-    document.getElementById("view-present-modal").classList.remove("hidden");
-}
-
-document.getElementById("close-card-btn").onclick = () => document.getElementById("view-present-modal").classList.add("hidden");
-document.getElementById("close-view-x").onclick = () => document.getElementById("view-present-modal").classList.add("hidden");
-document.getElementById("add-gift-btn").onclick = () => document.getElementById("create-present-modal").classList.remove("hidden");
-document.getElementById("cancel-wrap-btn").onclick = () => document.getElementById("create-present-modal").classList.add("hidden");
-
-document.querySelectorAll(".wrap-option").forEach(btn => {
-    btn.onclick = (e) => {
-        document.querySelectorAll(".wrap-option").forEach(b => b.classList.remove("active"));
-        e.currentTarget.classList.add("active");
-        selectedColor = e.currentTarget.dataset.color;
-        selectedRibbon = e.currentTarget.dataset.ribbon;
-        selectedName = e.currentTarget.dataset.name;
-        document.getElementById("wrap-selected-name").innerText = selectedName;
-    };
+closeModal.addEventListener('click', () => {
+  modal.classList.add('hidden');
 });
 
-document.getElementById("submit-wrap-btn").onclick = () => {
-    const sender = document.getElementById("input-sender").value.trim();
-    const message = document.getElementById("input-message").value.trim();
-    const photoUrl = document.getElementById("input-photo-url").value.trim();
-    if (!message) return alert("Please enter a message!");
-
-    presents.push({
-        id: Date.now(), sender: sender || "Friend", message: message,
-        photoUrl: photoUrl || "", color: selectedColor, ribbon: selectedRibbon,
-        x: 170 + (presents.length % 5) * 30, y: 250, w: 28, h: 28
-    });
-    document.getElementById("create-present-modal").classList.add("hidden");
-};
-
-spawnBackgroundBalloons();
-function render() { drawPixelRoom(); requestAnimationFrame(render); }
-render();
+// Start loop
+drawScene();
