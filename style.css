@@ -86,19 +86,19 @@ header h1 {
 /* Cake Positioning & Scaling */
 .cake-wrapper {
     position: absolute;
-    top: 48%;
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 26%;
-    max-width: 220px;
-    min-width: 120px;
+    width: 24%;
+    max-width: 200px;
+    min-width: 110px;
     z-index: 5;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
 
 .cake-wrapper:hover {
-    transform: translate(-50%, -52%) scale(1.02);
+    transform: translate(-50%, -44%) scale(1.02);
 }
 
 .cake-image {
@@ -179,16 +179,45 @@ header h1 {
     100% { transform: translateY(-20px) scale(1.8); opacity: 0; }
 }
 
-/* Floating Balloons */
+/* PURE CSS BALLOONS (Red Pixel Art Balloons) */
 .interactive.balloon {
     position: absolute;
-    width: 44px;
-    height: 58px;
-    background: url('image_3.png') no-repeat center center / contain;
+    width: 32px;
+    height: 50px;
     cursor: pointer;
     z-index: 6;
     transition: transform 0.2s ease, opacity 0.3s ease;
-    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
+}
+
+.balloon-body {
+    width: 30px;
+    height: 36px;
+    background: #d62828;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    position: relative;
+    box-shadow: inset -4px -4px 0px rgba(0,0,0,0.25), inset 4px 4px 0px rgba(255,255,255,0.4);
+}
+
+.balloon-body::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 4px;
+    background: #a31c1c;
+    border-radius: 2px;
+}
+
+.balloon-string {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 2px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateX(-50%);
 }
 
 .float-1 { animation: floatAnim 3.5s ease-in-out infinite alternate; }
@@ -201,63 +230,59 @@ header h1 {
 }
 
 .balloon.popping {
-    animation: popEffect 0.25s forwards ease-out !important;
+    animation: popEffect 0.2s forwards ease-out !important;
 }
 
 @keyframes popEffect {
     0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.4); opacity: 0.8; }
+    50% { transform: scale(1.5); opacity: 0.8; }
     100% { transform: scale(0); opacity: 0; }
 }
 
-/* Gift Boxes Container Grid */
-.gift-grid {
+/* FLOOR GIFT ROW (Matched with screenshot overlay style) */
+.gift-row-container {
     position: absolute;
     bottom: 2%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 95%;
+    left: 0;
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: flex-end;
-    z-index: 7;
-    gap: 4px;
+    padding: 0 20px;
+    z-index: 10;
 }
 
-.gift-box {
+.gift-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     cursor: pointer;
-    flex: 1;
-    max-width: 75px;
-    text-align: center;
-    transition: transform 0.2s ease, filter 0.3s ease;
+    transition: transform 0.15s ease;
     user-select: none;
 }
 
-.gift-box:hover {
-    transform: translateY(-5px) scale(1.08);
+.gift-item:hover {
+    transform: translateY(-4px) scale(1.1);
 }
 
-.gift-image {
-    width: 100%;
+.gift-icon {
+    width: 32px;
     height: auto;
-    display: block;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
-    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
 }
 
-.gift-label {
-    font-size: 6px;
-    color: #f7e2a9;
-    margin-top: 2px;
-    text-shadow: 1px 1px #000;
+.gift-tag {
+    font-size: 7px;
+    color: #e5c188;
+    margin-top: 4px;
+    text-shadow: 1px 1px 2px #000;
 }
 
-.gift-box.opened .gift-image {
-    transform: scale(1.1) translateY(-3px);
-    filter: drop-shadow(0 0 10px #d4a017);
+.gift-item.opened .gift-icon {
+    filter: drop-shadow(0 0 8px #ffd700);
 }
 
-.gift-box.opened .gift-label {
+.gift-item.opened .gift-tag {
     color: #5cd670;
 }
 
@@ -331,13 +356,7 @@ footer {
 @media (max-width: 600px) {
     header h1 { font-size: 12px; }
     .pixel-button { font-size: 8px; padding: 8px 12px; }
-    .gift-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 6px;
-        bottom: 2%;
-    }
-    .gift-box { max-width: none; }
-    .gift-label { font-size: 5px; }
-    .interactive.balloon { width: 32px; height: 44px; }
+    .gift-icon { width: 22px; }
+    .gift-tag { font-size: 5px; }
+    .interactive.balloon { width: 24px; height: 38px; }
 }
