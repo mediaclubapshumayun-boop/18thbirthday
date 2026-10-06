@@ -2,15 +2,15 @@ let audioContext, analyser, microphone;
 let isMicActive = false;
 let candlesLit = true;
 
-// Web Audio API Synthesizer for Effects
+// Synthesizer Pop Sound (No audio files needed)
 function playPopSound() {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(400, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(450, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.08);
         gain.gain.setValueAtTime(0.3, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
         osc.connect(gain);
@@ -128,15 +128,15 @@ document.querySelectorAll('.interactive.balloon').forEach(b => {
         balloon.classList.add('popping');
         setTimeout(() => {
             balloon.style.display = 'none';
-        }, 250);
+        }, 200);
     });
 });
 
-// Interactive 8 Gift Boxes Opening
+// Floor Gift Items Click Handler
 const modal = document.getElementById('wishModal');
 const wishText = document.getElementById('wishText');
 
-document.querySelectorAll('.gift-box').forEach(g => {
+document.querySelectorAll('.gift-item').forEach(g => {
     g.addEventListener('click', (e) => {
         const gift = e.currentTarget;
         const wish = gift.getAttribute('data-wish');
