@@ -1,82 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harry Potter Birthday Asset Pack & Scene - Zash ⚡</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zash's 28th Birthday Feast!</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 </head>
 <body>
-
-    <!-- Outer Frame (Exact Match with Image) -->
-    <div id="outer-frame">
-        <div class="top-subtitle">Zash's 28th birthday!</div>
-        
-        <div id="game-viewport">
-            <canvas id="room-canvas" width="640" height="380"></canvas>
-            
-            <button id="mode-toggle-btn" class="pixel-btn mode-btn">🔍 TOGGLE ASSET PACK / SCENE</button>
-            <button id="add-gift-btn" class="pixel-btn leave-gift-btn">🎁 LEAVE A PRESENT</button>
-        </div>
-
-        <div class="mid-subtitle">Zash's 28th birthdagi</div>
-        <div class="bottom-subtitle">ZASH'S 28TH BIRTHDAY FEAST!</div>
+  <div class="wrapper">
+    <div class="header-banner">
+      <h1>ZASH'S 28TH BIRTHDAY FEAST!</h1>
     </div>
 
-    <!-- Interactive Hint Bar -->
-    <div id="mic-status-bar" class="mic-status">
-        ⚡ Click cake to blow out candles! Click balloons to pop!
+    <div class="mic-status-container">
+      <button id="micBtn" class="pixel-btn">🎤 Enable Mic to Blow Candles</button>
+      <span id="micStatusText">Click button to allow mic</span>
     </div>
 
-    <!-- View Present Modal -->
-    <div id="view-present-modal" class="pixel-modal hidden">
-        <div class="present-card-container">
-            <div class="card-header-pink">
-                <span class="header-sub">BIRTHDAY GIFT FOR ZASH</span>
-                <h2 id="card-sender-name">From Hagrid</h2>
-                <button class="close-card-x" id="close-view-x">✕</button>
-            </div>
-            
-            <div class="card-content-split">
-                <div class="letter-box">
-                    <div class="tab-label">LETTER</div>
-                    <p id="card-letter-text">Happee Birthdae Zash!</p>
-                </div>
-                
-                <div class="photo-box">
-                    <div class="tab-label">PHOTO</div>
-                    <div class="polaroid-frame">
-                        <img id="card-photo-img" src="" alt="Memory" />
-                    </div>
-                </div>
-            </div>
-            
-            <button class="pixel-btn card-close-btn" id="close-card-btn">CLOSE</button>
-        </div>
+    <!-- Main Scene Canvas -->
+    <div class="room-container">
+      <canvas id="roomCanvas" width="800" height="500"></canvas>
     </div>
 
-    <!-- Add Present Modal -->
-    <div id="create-present-modal" class="pixel-modal hidden">
-        <div class="wrapping-station-box">
-            <div class="station-header">
-                <h3>PICK THE WRAPPING</h3>
-                <span class="step-text">HOGWARTS SPECIAL PRESENT</span>
-            </div>
-
-            <div class="present-form-inputs">
-                <input type="text" id="input-sender" placeholder="Your Name" maxlength="20" />
-                <textarea id="input-message" placeholder="Write message for Zash..." rows="3"></textarea>
-                <input type="url" id="input-photo-url" placeholder="Photo URL (Optional)" />
-            </div>
-
-            <div class="station-actions">
-                <button id="cancel-wrap-btn" class="pixel-btn">CANCEL</button>
-                <button id="submit-wrap-btn" class="pixel-btn highlight-btn">SEND GIFT 🦉</button>
-            </div>
-        </div>
+    <!-- Wish Modal Popup for Gifts -->
+    <div id="wishModal" class="modal hidden">
+      <div class="modal-content">
+        <span id="closeModal" class="close-btn">&times;</span>
+        <h2>🎁 Magical Wish 🎁</h2>
+        <p id="wishText"></p>
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <div class="footer-note">
+      <p>🎈 Click Balloons to POP | 🎁 Click Gifts to OPEN | 🎤 Blow into Mic for Candles</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
