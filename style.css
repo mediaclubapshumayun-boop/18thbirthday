@@ -182,8 +182,8 @@ header h1 {
 /* Floating Balloons */
 .interactive.balloon {
     position: absolute;
-    width: 42px;
-    height: 56px;
+    width: 44px;
+    height: 58px;
     background: url('image_3.png') no-repeat center center / contain;
     cursor: pointer;
     z-index: 6;
@@ -213,10 +213,10 @@ header h1 {
 /* Gift Boxes Container Grid */
 .gift-grid {
     position: absolute;
-    bottom: 3%;
+    bottom: 2%;
     left: 50%;
     transform: translateX(-50%);
-    width: 92%;
+    width: 95%;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -225,42 +225,40 @@ header h1 {
 }
 
 .gift-box {
-    background: #5a1827;
-    border: 2px solid #d4a017;
-    border-radius: 4px;
-    padding: 6px 4px;
     cursor: pointer;
     flex: 1;
-    max-width: 85px;
+    max-width: 75px;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-    transition: transform 0.2s, background-color 0.3s, border-color 0.3s;
+    transition: transform 0.2s ease, filter 0.3s ease;
     user-select: none;
 }
 
 .gift-box:hover {
-    transform: translateY(-4px) scale(1.05);
-    background-color: #782134;
+    transform: translateY(-5px) scale(1.08);
 }
 
-.gift-lid {
-    font-size: 18px;
-    transition: transform 0.3s ease;
+.gift-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+    transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .gift-label {
-    font-size: 7px;
+    font-size: 6px;
     color: #f7e2a9;
-    margin-top: 3px;
+    margin-top: 2px;
+    text-shadow: 1px 1px #000;
 }
 
-.gift-box.opened {
-    background: #2a4d2e;
-    border-color: #5cd670;
+.gift-box.opened .gift-image {
+    transform: scale(1.1) translateY(-3px);
+    filter: drop-shadow(0 0 10px #d4a017);
 }
 
-.gift-box.opened .gift-lid {
-    transform: translateY(-6px) rotate(-12deg);
+.gift-box.opened .gift-label {
+    color: #5cd670;
 }
 
 /* Wish Modal */
@@ -340,7 +338,6 @@ footer {
         bottom: 2%;
     }
     .gift-box { max-width: none; }
-    .gift-lid { font-size: 14px; }
-    .gift-label { font-size: 6px; }
+    .gift-label { font-size: 5px; }
     .interactive.balloon { width: 32px; height: 44px; }
 }
