@@ -22,11 +22,11 @@
         <div class="scene-container">
             <img src="bg.jpg" alt="Harry Potter Birthday Room" id="bgImage">
 
-            <!-- Cake Fixed Directly on Table -->
+            <!-- Cake Positioned Perfectly on Table -->
             <div class="cake-wrapper" id="cakeContainer" title="Click to blow candles!">
                 <img src="cake.png" alt="Birthday Cake" class="cake-image">
                 
-                <!-- Candle Flames -->
+                <!-- Candle Flames mapped to cake candles -->
                 <div class="flame-group">
                     <div class="candle-flame" style="top: 8%; left: 49.5%;"></div>
                     <div class="candle-flame" style="top: 41%; left: 34.5%;"></div>
@@ -36,7 +36,7 @@
                     <div class="candle-flame" style="top: 41%; left: 66.0%;"></div>
                 </div>
 
-                <!-- Smoke Effect -->
+                <!-- Smoke Animation Element -->
                 <div class="smoke-container" id="smokeEffect">
                     <div class="smoke-puff"></div>
                     <div class="smoke-puff"></div>
@@ -44,65 +44,51 @@
                 </div>
             </div>
 
-            <!-- Pixel Art Balloons -->
-            <div class="interactive balloon pixel-balloon float-1" id="balloon1" style="top: 10%; left: 6%;">
-                <div class="balloon-body"></div>
-                <div class="balloon-string"></div>
+            <!-- Pixel Art Balloons using balloon.png image -->
+            <div class="interactive balloon float-1" id="balloon1" style="top: 10%; left: 8%;">
+                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
             </div>
-            <div class="interactive balloon pixel-balloon float-2" id="balloon2" style="top: 22%; left: 14%;">
-                <div class="balloon-body"></div>
-                <div class="balloon-string"></div>
+            <div class="interactive balloon float-2" id="balloon2" style="top: 22%; left: 16%;">
+                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
             </div>
-            <div class="interactive balloon pixel-balloon float-3" id="balloon3" style="top: 36%; left: 7%;">
-                <div class="balloon-body"></div>
-                <div class="balloon-string"></div>
+            <div class="interactive balloon float-3" id="balloon3" style="top: 36%; left: 7%;">
+                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
             </div>
-            <div class="interactive balloon pixel-balloon float-1" id="balloon4" style="top: 10%; left: 86%;">
-                <div class="balloon-body"></div>
-                <div class="balloon-string"></div>
+            <div class="interactive balloon float-1" id="balloon4" style="top: 10%; left: 84%;">
+                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
             </div>
-            <div class="interactive balloon pixel-balloon float-2" id="balloon5" style="top: 22%; left: 78%;">
-                <div class="balloon-body"></div>
-                <div class="balloon-string"></div>
+            <div class="interactive balloon float-2" id="balloon5" style="top: 22%; left: 76%;">
+                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
             </div>
-            <div class="interactive balloon pixel-balloon float-3" id="balloon6" style="top: 36%; left: 87%;">
-                <div class="balloon-body"></div>
-                <div class="balloon-string"></div>
+            <div class="interactive balloon float-3" id="balloon6" style="top: 36%; left: 85%;">
+                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
             </div>
 
-            <!-- Right Bottom Corner Stacked Gift Boxes -->
-            <div class="right-corner-gifts">
-                <div class="gift-item" data-wish="✨ May your 18th year be filled with pure magic, joy, and endless spells of victory!">
+            <!-- Stacked Large Pixel Gift Boxes (Right Corner, No Tags) -->
+            <div class="gift-stack-corner">
+                <div class="gift-item gift-pos-1" data-wish="✨ May your 18th year be filled with pure magic, joy, and endless spells of victory!">
                     <img src="gift.png" alt="Gift 1" class="gift-icon">
-                    <span class="gift-tag">#1</span>
                 </div>
-                <div class="gift-item" data-wish="🦉 A special Hogwarts owl brought this: Have a fantastic 18th Birthday Zash!">
+                <div class="gift-item gift-pos-2" data-wish="🦉 A special Hogwarts owl brought this: Have a fantastic 18th Birthday Zash!">
                     <img src="gift.png" alt="Gift 2" class="gift-icon">
-                    <span class="gift-tag">#2</span>
                 </div>
-                <div class="gift-item" data-wish="⚡ Accio happiness! May all your dreams and magical ambitions come true this year!">
+                <div class="gift-item gift-pos-3" data-wish="⚡ Accio happiness! May all your dreams and magical ambitions come true this year!">
                     <img src="gift.png" alt="Gift 3" class="gift-icon">
-                    <span class="gift-tag">#3</span>
                 </div>
-                <div class="gift-item" data-wish="🏆 100 points to Gryffindor for being an amazing friend! Happy 18th Birthday!">
+                <div class="gift-item gift-pos-4" data-wish="🏆 100 points to Gryffindor for being an amazing friend! Happy 18th Birthday!">
                     <img src="gift.png" alt="Gift 4" class="gift-icon">
-                    <span class="gift-tag">#4</span>
                 </div>
-                <div class="gift-item" data-wish="🧪 Wishing you a year brewed with success, good health, and wonderful adventures!">
+                <div class="gift-item gift-pos-5" data-wish="🧪 Wishing you a year brewed with success, good health, and wonderful adventures!">
                     <img src="gift.png" alt="Gift 5" class="gift-icon">
-                    <span class="gift-tag">#5</span>
                 </div>
-                <div class="gift-item" data-wish="🧹 May you fly high toward your ultimate goals and catch every Golden Snitch in life!">
+                <div class="gift-item gift-pos-6" data-wish="🧹 May you fly high toward your ultimate goals and catch every Golden Snitch in life!">
                     <img src="gift.png" alt="Gift 6" class="gift-icon">
-                    <span class="gift-tag">#6</span>
                 </div>
-                <div class="gift-item" data-wish="🔮 The Marauder's Map reveals: A grand year of happiness lies ahead for Zash!">
+                <div class="gift-item gift-pos-7" data-wish="🔮 The Marauder's Map reveals: A grand year of happiness lies ahead for Zash!">
                     <img src="gift.png" alt="Gift 7" class="gift-icon">
-                    <span class="gift-tag">#7</span>
                 </div>
-                <div class="gift-item" data-wish="🌟 Mischief Managed! Cheers to 18 years of incredible memories and many more to come!">
+                <div class="gift-item gift-pos-8" data-wish="🌟 Mischief Managed! Cheers to 18 years of incredible memories and many more to come!">
                     <img src="gift.png" alt="Gift 8" class="gift-icon">
-                    <span class="gift-tag">#8</span>
                 </div>
             </div>
         </div>
