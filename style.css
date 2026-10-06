@@ -1,122 +1,127 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  background-color: #0c0814;
-  color: #eed6ab;
-  font-family: 'Press Start 2P', monospace;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+    background-color: #0c090a;
+    color: #e5b38d;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-.wrapper {
-  text-align: center;
-  padding: 15px;
+.main-wrapper {
+    text-align: center;
+    max-width: 900px;
+    padding: 20px;
 }
 
-.header-banner h1 {
-  font-size: 16px;
-  color: #ffd700;
-  text-shadow: 3px 3px #5c0d18;
-  margin-bottom: 12px;
+header h1 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #f7e2a9;
+    text-shadow: 2px 2px #5a3c1c;
 }
 
-.mic-status-container {
-  margin-bottom: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
+.controls {
+    margin-bottom: 20px;
 }
 
-.pixel-btn {
-  background-color: #8c1111;
-  color: #ffffff;
-  border: 3px solid #ffd700;
-  padding: 8px 14px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
-  cursor: pointer;
-  box-shadow: 3px 3px 0px #000;
+.pixel-button {
+    background-color: #8f1e31;
+    color: #fff;
+    border: 3px solid #d4a017;
+    padding: 10px 20px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: 2px 2px #000;
 }
 
-.pixel-btn:hover {
-  background-color: #a81515;
+.pixel-button:hover {
+    background-color: #a32238;
 }
 
-#micStatusText {
-  font-size: 9px;
-  color: #bfa373;
+.mic-status {
+    margin-top: 10px;
+    font-size: 8px;
+    color: #bf8d5e;
 }
 
-.room-container {
-  border: 6px solid #4a250e;
-  border-radius: 4px;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.2), 0 0 10px #000;
-  display: inline-block;
-  background-color: #000;
+.scene-container {
+    border: 8px solid #4a3118;
+    box-shadow: 0 0 20px rgba(212, 160, 23, 0.4);
+    display: inline-block;
+    background-color: #000;
 }
 
 canvas {
-  display: block;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  cursor: pointer;
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    cursor: pointer;
 }
 
-/* Modal Popup */
+/* Modal Styling */
 .modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
+    display: flex;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
 }
 
 .modal.hidden {
-  display: none;
+    display: none;
 }
 
-.modal-content {
-  background: #2b1405;
-  border: 4px solid #ffd700;
-  padding: 25px;
-  max-width: 400px;
-  color: #eed6ab;
-  text-align: center;
-  position: relative;
-  box-shadow: 0 0 15px #ffd700;
+.pixel-frame {
+    background-color: #2b1405;
+    border: 4px solid #d4a017;
+    padding: 30px;
+    width: 400px;
+    text-align: center;
+    color: #eeddbb;
+    position: relative;
+    box-shadow: 0 0 15px rgba(212, 160, 23, 0.5);
 }
 
 .modal-content h2 {
-  font-size: 14px;
-  margin-bottom: 15px;
-  color: #ffd700;
+    font-size: 12px;
+    margin-bottom: 20px;
+    color: #d4a017;
 }
 
 .modal-content p {
-  font-size: 10px;
-  line-height: 1.6;
+    font-size: 10px;
+    line-height: 1.8;
 }
 
-.close-btn {
-  position: absolute;
-  top: 8px; right: 12px;
-  font-size: 18px;
-  color: #ffd700;
-  cursor: pointer;
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-.footer-note {
-  margin-top: 12px;
-  font-size: 9px;
-  color: #bfa373;
+.close:hover {
+    color: #fff;
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 8px;
+    color: #8f6a45;
 }
