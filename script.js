@@ -17,9 +17,7 @@ function playPopSound() {
         gain.connect(ctx.destination);
         osc.start();
         osc.stop(ctx.currentTime + 0.08);
-    } catch (e) {
-        // Fallback silently if web audio isn't permitted without gesture
-    }
+    } catch (e) {}
 }
 
 function playBlowSound() {
@@ -43,9 +41,7 @@ function playBlowSound() {
         filter.connect(gain);
         gain.connect(ctx.destination);
         noise.start();
-    } catch (e) {
-        // Fallback silently
-    }
+    } catch (e) {}
 }
 
 // Extinguish Candles Logic
@@ -96,10 +92,8 @@ function detectBlow() {
 
     let average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
 
-    // Threshold check for continuous blowing vs ambient noise
     if (average > 35) {
         blowCounter++;
-        // Add subtle flame flickering reaction before full extinguish
         document.querySelectorAll('.candle-flame').forEach(el => {
             el.style.transform = `scale(${1 + Math.random() * 0.4})`;
         });
