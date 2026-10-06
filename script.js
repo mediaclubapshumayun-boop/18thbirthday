@@ -11,6 +11,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const giftItems = document.querySelectorAll('.gift-item');
     const balloons = document.querySelectorAll('.balloon');
 
+    // Music Elements
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggleBtn = document.getElementById('musicToggleBtn');
+    let isMusicPlaying = false;
+
+    // Function to Start Audio
+    function playAudio() {
+        if (!isMusicPlaying) {
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                musicToggleBtn.textContent = "🎵 Music: ON";
+            }).catch(err => {
+                console.log("Autoplay blocked, waiting for user click.", err);
+            });
+        }
+    }
+
+    // Toggle Music Button
+    musicToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isMusicPlaying) {
+            bgMusic.pause();
+            isMusicPlaying = false;
+            musicToggleBtn.textContent = "🎵 Music: OFF";
+        } else {
+            playAudio();
+        }
+    });
+
+    // Auto-play music on first interaction anywhere on page
+    document.body.addEventListener('click', () => {
+        playAudio();
+    }, { once: true });
+
     let candlesBlown = false;
 
     // Extinguish Candles Function
@@ -53,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 let average = sum / bufferLength;
 
-                // Blow detection threshold
                 if (average > 45) {
                     blowOutCandles();
                 } else {
