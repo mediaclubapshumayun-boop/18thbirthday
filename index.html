@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zash's 28th Birthday Feast!</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zash's 28th Birthday Feast!</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="wrapper">
-    <div class="header-banner">
-      <h1>ZASH'S 28TH BIRTHDAY FEAST!</h1>
-    </div>
+    <div class="main-wrapper">
+        <header>
+            <h1>ZASH'S 28TH BIRTHDAY FEAST!</h1>
+        </header>
 
-    <div class="mic-status-container">
-      <button id="micBtn" class="pixel-btn">🎤 Enable Mic to Blow Candles</button>
-      <span id="micStatusText">Click button to allow mic</span>
-    </div>
+        <div class="controls">
+            <button id="micBtn" class="pixel-button">🎤 Enable Mic to Blow Candles</button>
+            <p id="micStatus" class="mic-status">Mic not enabled.</p>
+        </div>
 
-    <!-- Main Scene Canvas -->
-    <div class="room-container">
-      <canvas id="roomCanvas" width="800" height="500"></canvas>
-    </div>
+        <div class="scene-container">
+            <canvas id="birthdayCanvas" width="800" height="500"></canvas>
+        </div>
 
-    <!-- Wish Modal Popup for Gifts -->
-    <div id="wishModal" class="modal hidden">
-      <div class="modal-content">
-        <span id="closeModal" class="close-btn">&times;</span>
-        <h2>🎁 Magical Wish 🎁</h2>
-        <p id="wishText"></p>
-      </div>
-    </div>
+        <!-- Gift Wish Modal -->
+        <div id="wishModal" class="modal hidden">
+            <div class="modal-content pixel-frame">
+                <span id="closeModal" class="close">&times;</span>
+                <h2>🎁 A Birthday Wish for Zash! 🎁</h2>
+                <p id="wishText"></p>
+            </div>
+        </div>
 
-    <div class="footer-note">
-      <p>🎈 Click Balloons to POP | 🎁 Click Gifts to OPEN | 🎤 Blow into Mic for Candles</p>
+        <footer>
+            <p>Click Balloons to Pop | Click Gifts to Open | Blow Mic to Blow Candles</p>
+        </footer>
     </div>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
