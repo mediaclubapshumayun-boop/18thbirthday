@@ -69,32 +69,36 @@ header h1 {
     background-color: #1a0f07;
     width: 100%;
     max-width: 850px;
+    aspect-ratio: 16 / 10;
     margin: 0 auto;
 }
 
 #bgImage {
-    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
 }
 
 /* Cake Positioning & Scaling */
 .cake-wrapper {
     position: absolute;
-    top: 52%;
+    top: 48%;
     left: 50%;
-    transform: translate(-50%, -45%);
-    width: 28%;
-    max-width: 240px;
-    min-width: 140px;
+    transform: translate(-50%, -50%);
+    width: 26%;
+    max-width: 220px;
+    min-width: 120px;
     z-index: 5;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
 
 .cake-wrapper:hover {
-    transform: translate(-50%, -47%) scale(1.02);
+    transform: translate(-50%, -52%) scale(1.02);
 }
 
 .cake-image {
@@ -180,7 +184,7 @@ header h1 {
     position: absolute;
     width: 42px;
     height: 56px;
-    background: url('assets/balloon.png') no-repeat center center / contain;
+    background: url('image_3.png') no-repeat center center / contain;
     cursor: pointer;
     z-index: 6;
     transition: transform 0.2s ease, opacity 0.3s ease;
@@ -325,7 +329,7 @@ footer {
     color: #8f6a45;
 }
 
-/* Responsive adjustments */
+/* Mobile Responsiveness */
 @media (max-width: 600px) {
     header h1 { font-size: 12px; }
     .pixel-button { font-size: 8px; padding: 8px 12px; }
