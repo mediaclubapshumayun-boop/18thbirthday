@@ -2,7 +2,7 @@ let audioContext, analyser, microphone;
 let isMicActive = false;
 let candlesLit = true;
 
-// Synthesizer Pop Sound (No audio files needed)
+// Synthesizer Pop Sound
 function playPopSound() {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
