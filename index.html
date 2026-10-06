@@ -4,138 +4,389 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zash's 18th Birthday Feast!</title>
+
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+        rel="stylesheet"
+    >
 </head>
+
 <body>
-    <!-- Background Audio Element -->
+
+    <!-- =========================
+         BACKGROUND MUSIC
+    ========================== -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="bg-music.mp3" type="audio/mpeg">
+        <source src="./bg-music.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
-    <!-- Welcome / Start Overlay to bypass browser audio block -->
+
+    <!-- =========================
+         START OVERLAY
+    ========================== -->
     <div id="startOverlay" class="start-overlay">
+
         <div class="pixel-frame start-box">
+
             <h2>⚡ HOGWARTS INVITATION ⚡</h2>
-            <p>Zash's 18th Birthday Celebration is ready!</p>
-            <button id="startBtn" class="pixel-button pulse-btn">🎉 Start Celebration & Music 🎉</button>
+
+            <p>
+                Zash's 18th Birthday Celebration is ready!
+            </p>
+
+            <button
+                id="startBtn"
+                class="pixel-button pulse-btn"
+            >
+                🎉 Start Celebration & Music 🎉
+            </button>
+
         </div>
+
     </div>
 
+
+    <!-- =========================
+         MAIN WEBSITE
+    ========================== -->
     <div class="main-wrapper">
+
         <header>
             <h1>ZASH'S 18TH BIRTHDAY FEAST!</h1>
         </header>
 
+
+        <!-- =========================
+             CONTROLS
+        ========================== -->
         <div class="controls">
-            <button id="micBtn" class="pixel-button">🎤 Enable Mic to Blow Candles</button>
-            <button id="musicToggleBtn" class="pixel-button">🎵 Music: ON</button>
-            <p id="micStatus" class="mic-status">Blow candles using microphone or click the cake!</p>
+
+            <button
+                id="micBtn"
+                class="pixel-button"
+            >
+                🎤 Enable Mic to Blow Candles
+            </button>
+
+
+            <button
+                id="musicToggleBtn"
+                class="pixel-button"
+            >
+                🎵 Music: OFF
+            </button>
+
+
+            <p id="micStatus" class="mic-status">
+                Blow candles using microphone or click the cake!
+            </p>
+
         </div>
 
-        <!-- Main Scene Container -->
-        <div class="scene-container">
-            <img src="bg.jpg" alt="Harry Potter Birthday Room" id="bgImage">
 
-            <!-- Cake Container -->
-            <div class="cake-wrapper" id="cakeContainer" title="Click to blow candles!">
-                <img src="cake.png" alt="Birthday Cake" class="cake-image">
-                
+        <!-- =========================
+             MAIN SCENE
+        ========================== -->
+        <div class="scene-container">
+
+            <img
+                src="bg.jpg"
+                alt="Harry Potter Birthday Room"
+                id="bgImage"
+            >
+
+
+            <!-- =========================
+                 CAKE
+            ========================== -->
+            <div
+                class="cake-wrapper"
+                id="cakeContainer"
+                title="Click to blow candles!"
+            >
+
+                <img
+                    src="cake.png"
+                    alt="Birthday Cake"
+                    class="cake-image"
+                >
+
+
                 <!-- Candle Flames -->
                 <div class="flame-group">
-                    <div class="candle-flame" style="top: 8%; left: 49.5%;"></div>
-                    <div class="candle-flame" style="top: 41%; left: 34.5%;"></div>
-                    <div class="candle-flame" style="top: 45%; left: 43.2%;"></div>
-                    <div class="candle-flame" style="top: 47%; left: 50.8%;"></div>
-                    <div class="candle-flame" style="top: 45%; left: 58.2%;"></div>
-                    <div class="candle-flame" style="top: 41%; left: 66.0%;"></div>
+
+                    <div
+                        class="candle-flame"
+                        style="top: 8%; left: 49.5%;"
+                    ></div>
+
+                    <div
+                        class="candle-flame"
+                        style="top: 41%; left: 34.5%;"
+                    ></div>
+
+                    <div
+                        class="candle-flame"
+                        style="top: 45%; left: 43.2%;"
+                    ></div>
+
+                    <div
+                        class="candle-flame"
+                        style="top: 47%; left: 50.8%;"
+                    ></div>
+
+                    <div
+                        class="candle-flame"
+                        style="top: 45%; left: 58.2%;"
+                    ></div>
+
+                    <div
+                        class="candle-flame"
+                        style="top: 41%; left: 66%;"
+                    ></div>
+
                 </div>
 
-                <!-- Smoke Effect -->
-                <div class="smoke-container" id="smokeEffect">
+
+                <!-- Smoke -->
+                <div
+                    class="smoke-container"
+                    id="smokeEffect"
+                >
+
                     <div class="smoke-puff"></div>
                     <div class="smoke-puff"></div>
                     <div class="smoke-puff"></div>
+
                 </div>
+
             </div>
 
-            <!-- Left Group Balloons -->
-            <div class="interactive balloon float-1" id="balloon1" style="top: 24%; left: 10%;">
-                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
-            </div>
-            <div class="interactive balloon float-2" id="balloon2" style="top: 28%; left: 14%;">
-                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
-            </div>
-            <div class="interactive balloon float-3" id="balloon3" style="top: 38%; left: 11%;">
-                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
+
+            <!-- =========================
+                 LEFT BALLOONS
+            ========================== -->
+
+            <div
+                class="interactive balloon float-1"
+                id="balloon1"
+                style="top: 24%; left: 10%;"
+            >
+                <img
+                    src="balloon.png"
+                    alt="Red Pixel Balloon"
+                    class="balloon-img"
+                >
             </div>
 
-            <!-- Right Group Balloons -->
-            <div class="interactive balloon float-1" id="balloon4" style="top: 24%; left: 81%;">
-                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
+
+            <div
+                class="interactive balloon float-2"
+                id="balloon2"
+                style="top: 28%; left: 14%;"
+            >
+                <img
+                    src="balloon.png"
+                    alt="Red Pixel Balloon"
+                    class="balloon-img"
+                >
             </div>
-            <div class="interactive balloon float-2" id="balloon5" style="top: 28%; left: 77%;">
-                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
+
+
+            <div
+                class="interactive balloon float-3"
+                id="balloon3"
+                style="top: 38%; left: 11%;"
+            >
+                <img
+                    src="balloon.png"
+                    alt="Red Pixel Balloon"
+                    class="balloon-img"
+                >
             </div>
-            <div class="interactive balloon float-3" id="balloon6" style="top: 38%; left: 80%;">
-                <img src="balloon.png" alt="Red Pixel Balloon" class="balloon-img">
+
+
+            <!-- =========================
+                 RIGHT BALLOONS
+            ========================== -->
+
+            <div
+                class="interactive balloon float-1"
+                id="balloon4"
+                style="top: 24%; left: 81%;"
+            >
+                <img
+                    src="balloon.png"
+                    alt="Red Pixel Balloon"
+                    class="balloon-img"
+                >
             </div>
-            <!-- Left Side Gift Cluster -->
-            <div class="gift-cluster gift-cluster-left">
-                <div class="gift-item gift-l1" data-wish="Yoo, happy birthday man! 💕
+
+
+            <div
+                class="interactive balloon float-2"
+                id="balloon5"
+                style="top: 28%; left: 77%;"
+            >
+                <img
+                    src="balloon.png"
+                    alt="Red Pixel Balloon"
+                    class="balloon-img"
+                >
+            </div>
+
+
+            <div
+                class="interactive balloon float-3"
+                id="balloon6"
+                style="top: 38%; left: 80%;"
+            >
+                <img
+                    src="balloon.png"
+                    alt="Red Pixel Balloon"
+                    class="balloon-img"
+                >
+            </div>
+
+
+            <!-- =========================
+                 LEFT GIFTS
+            ========================== -->
+
+            <div class="gift-cluster gift-cluster-left">
+
+                <div
+                    class="gift-item gift-l1"
+                    data-wish="Yoo, happy birthday man! 💕
 
 Bro, you’re not just a friend to me...You’re a gift from God for all the good things I’ve ever done. You’ve never left me alone during my downs and have always had my back. You’re the person I trust the most, and you know all my secrets. I’ve never once regretted sharing anything with you.
 
 You truly are a blessing in my life and I pray that we stay together and remain brothers for the rest of our lives 🫂
-    
-Love you bro! 💝 - Asad Arshad">
-                    <img src="gift.png" alt="Gift 1" class="gift-icon">
-                </div>
-                <div class="gift-item gift-l2" data-wish="Muhammad Shahzain Najam is quite an exceptional creature but at the same time he is quite delusional. But over all, this person has been there. has witnessed some of the most embarassing and somewhat questionable parts of my life. And still we play together. We talk alot. We joke alot. We hangout.... I am basically out of words right now. As my and shahzain's friendship can not be described in words. So thank you for all this time from the past and no doubt we all are awaiting a bright future ahead of us. Happy birthday lil bro. It comes ones a year, so enjoy it as it is. But don't forget your friends in all that fun.">
-                    <img src="gift.png" alt="Gift 2" class="gift-icon">
-                </div>
-                <div class="gift-item gift-l3" data-wish="Bhai tu meray sath 12 saal sey haiii or mujhy smjh nhi arha kia bolu yehi boluga tu meray dil key boht qareeb hai mein wo sb teray sey keh skta hu jo kisi or sey nhi or teray pr trust kr skta jo kisi or pr nhi happy birthdayy bhaiiii 🎂🎂 -Azaan">
-                    <img src="gift.png" alt="Gift 3" class="gift-icon">
-                </div>
-                <div class="gift-item gift-l4" data-wish="What my note is that Shazain your a great guy, you showed me reality, the current state i am in right now would never be possible without you, i would have never left gaming and my old habits if i hadnt met you, Thank you for shaping my life. -Muhammad Asim Janjua">
-                    <img src="gift.png" alt="Gift 4" class="gift-icon">
-                </div>
-            </div>
 
-            <!-- Right Side Gift Cluster -->
-            <div class="gift-cluster gift-cluster-right">
-                <div class="gift-item gift-r1" data-wish="Happy Birthday, Pookie! 😂🎂 Another year older, but somehow still not any wiser and Taller.Thanks for all the crazy memories, stupid conversations, and moments that make life more fun.I hope u shine bright, just like your big forehead 😁(Don’t Get insecure,It’s a joke babes)😋.Jokes aside, Hope your day is as legendary as you think you are. 😭❤️ Stay blessed, Pookie😘!
-Best wishes for my pookie from 10/10 Tall curly hair baddie 😜 -Muhammad Ibrahim">
-                    <img src="gift.png" alt="Gift 5" class="gift-icon">
-                </div>
-                <div class="gift-item gift-r2" data-wish="Happy Birthday! You have been my friend for almost 5 years, and I value your friendship alot. I enjoy the conversations with you, the discussions and plans we make. I hope to stay in touch with you in the future as well.
+Love you bro! 💝 - Asad Arshad"
+                >
+                    <img src="gift.png" alt="Gift 1" class="gift-icon">
+                </div>
+
+
+                <div
+                    class="gift-item gift-l2"
+                    data-wish="Muhammad Shahzain Najam is quite an exceptional creature but at the same time he is quite delusional. But over all, this person has been there. has witnessed some of the most embarassing and somewhat questionable parts of my life. And still we play together. We talk alot. We joke alot. We hangout.... I am basically out of words right now. As my and shahzain's friendship can not be described in words. So thank you for all this time from the past and no doubt we all are awaiting a bright future ahead of us. Happy birthday lil bro. It comes ones a year, so enjoy it as it is. But don't forget your friends in all that fun."
+                >
+                    <img src="gift.png" alt="Gift 2" class="gift-icon">
+                </div>
+
+
+                <div
+                    class="gift-item gift-l3"
+                    data-wish="Bhai tu meray sath 12 saal sey haiii or mujhy smjh nhi arha kia bolu yehi boluga tu meray dil key boht qareeb hai mein wo sb teray sey keh skta hu jo kisi or sey nhi or teray pr trust kr skta jo kisi or pr nhi happy birthdayy bhaiiii 🎂🎂 -Azaan"
+                >
+                    <img src="gift.png" alt="Gift 3" class="gift-icon">
+                </div>
+
+
+                <div
+                    class="gift-item gift-l4"
+                    data-wish="What my note is that Shazain your a great guy, you showed me reality, the current state i am in right now would never be possible without you, i would have never left gaming and my old habits if i hadnt met you, Thank you for shaping my life. -Muhammad Asim Janjua"
+                >
+                    <img src="gift.png" alt="Gift 4" class="gift-icon">
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 RIGHT GIFTS
+            ========================== -->
+
+            <div class="gift-cluster gift-cluster-right">
+
+                <div
+                    class="gift-item gift-r1"
+                    data-wish="Happy Birthday, Pookie! 😂🎂 Another year older, but somehow still not any wiser and Taller. Thanks for all the crazy memories, stupid conversations, and moments that make life more fun. I hope u shine bright, just like your big forehead 😁 (Don’t Get insecure, It’s a joke babes) 😋. Jokes aside, Hope your day is as legendary as you think you are. 😭❤️ Stay blessed, Pookie😘! Best wishes for my pookie from 10/10 Tall curly hair baddie 😜 -Muhammad Ibrahim"
+                >
+                    <img src="gift.png" alt="Gift 5" class="gift-icon">
+                </div>
+
+
+                <div
+                    class="gift-item gift-r2"
+                    data-wish="Happy Birthday! You have been my friend for almost 5 years, and I value your friendship alot. I enjoy the conversations with you, the discussions and plans we make. I hope to stay in touch with you in the future as well.
+
 I hope you succeed in life as you turn 18. May you have a happy life, filled with the people you adore, the circumstances you covet, and the happiness that is incessant.
-Thank you for being my friend! -Muhammad Sharaheel">
-                    <img src="gift.png" alt="Gift 6" class="gift-icon">
-                </div>
-                <div class="gift-item gift-r3" data-wish="Happy Birthday Shahzain. -Hashir">
-                    <img src="gift.png" alt="Gift 7" class="gift-icon">
-                </div>
-                <div class="gift-item gift-r4" data-wish="Happy Birthday to the one who makes my world brighter every single day. -Mayka">
-                    <img src="gift.png" alt="Gift 8" class="gift-icon">
-                </div>
-            </div>
-        </div>
 
-        <!-- Wish Modal -->
-        <div id="wishModal" class="modal hidden">
-            <div class="modal-content pixel-frame">
-                <span id="closeModal" class="close">&times;</span>
-                <h2>🎁 Birthday Wish 🎁</h2>
-                <p id="wishText"></p>
-            </div>
-        </div>
+Thank you for being my friend! -Muhammad Sharaheel"
+                >
+                    <img src="gift.png" alt="Gift 6" class="gift-icon">
+                </div>
+
+
+                <div
+                    class="gift-item gift-r3"
+                    data-wish="Happy Birthday Shahzain. -Hashir"
+                >
+                    <img src="gift.png" alt="Gift 7" class="gift-icon">
+                </div>
+
+
+                <div
+                    class="gift-item gift-r4"
+                    data-wish="Happy Birthday to the one who makes my world brighter every single day. -Mayka"
+                >
+                    <img src="gift.png" alt="Gift 8" class="gift-icon">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             WISH MODAL
+        ========================== -->
+
+        <div
+            id="wishModal"
+            class="modal hidden"
+        >
+
+            <div class="modal-content pixel-frame">
+
+                <span
+                    id="closeModal"
+                    class="close"
+                >
+                    &times;
+                </span>
+
+                <h2>🎁 Birthday Wish 🎁</h2>
+
+                <p id="wishText"></p>
+
+            </div>
+
+        </div>
+
 
         <footer>
-            <p>Click Balloons to Pop | Click Gifts to Open | Blow Mic or Click Cake to Blow Candles</p>
+            <p>
+                Click Balloons to Pop |
+                Click Gifts to Open |
+                Blow Mic or Click Cake to Blow Candles
+            </p>
         </footer>
+
     </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
     <script src="script.js"></script>
+
 </body>
 </html>
