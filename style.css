@@ -13,38 +13,42 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 10px;
 }
 
 .main-wrapper {
     text-align: center;
+    width: 100%;
     max-width: 950px;
-    padding: 15px;
+    padding: 10px;
 }
 
 header h1 {
-    font-size: 18px;
-    margin-bottom: 15px;
+    font-size: 16px;
+    margin-bottom: 12px;
     color: #f7e2a9;
     text-shadow: 2px 2px #5a3c1c;
 }
 
 .controls {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .pixel-button {
     background-color: #8f1e31;
     color: #fff;
     border: 3px solid #d4a017;
-    padding: 10px 18px;
+    padding: 10px 16px;
     font-family: 'Press Start 2P', monospace;
     font-size: 10px;
     cursor: pointer;
     box-shadow: 2px 2px #000;
+    transition: transform 0.1s ease, background-color 0.2s;
 }
 
 .pixel-button:hover {
     background-color: #a32238;
+    transform: scale(1.02);
 }
 
 .mic-status {
@@ -53,65 +57,219 @@ header h1 {
     color: #bf8d5e;
 }
 
+/* Scene Container */
 .scene-container {
     position: relative;
     border: 6px solid #4a3118;
     box-shadow: 0 0 25px rgba(212, 160, 23, 0.4);
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
+    background-color: #1a0f07;
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
 }
 
 #bgImage {
     display: block;
     width: 100%;
-    max-width: 850px;
     height: auto;
+    object-fit: contain;
 }
 
-/* Invisible Clickable Zones */
-.interactive {
+/* Cake Positioning & Scaling */
+.cake-wrapper {
     position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -45%);
+    width: 28%;
+    max-width: 240px;
+    min-width: 140px;
+    z-index: 5;
     cursor: pointer;
-    border-radius: 50%;
+    transition: transform 0.2s ease;
 }
 
-.interactive.balloon {
-    width: 5%;
-    height: 9%;
+.cake-wrapper:hover {
+    transform: translate(-50%, -47%) scale(1.02);
 }
 
-.interactive.gift {
-    width: 8%;
-    height: 12%;
-    border-radius: 5px;
+.cake-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.6));
 }
 
-/* Glowing Flame overlay for microphone blow animation */
+/* Candle Flames */
+.flame-group {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
 .candle-flame {
     position: absolute;
-    width: 8px;
-    height: 12px;
-    background: radial-gradient(circle, #fff 20%, #ff9900 70%, transparent 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 10px #ff9900;
-    animation: flicker 0.2s infinite alternate;
+    width: 7px;
+    height: 11px;
+    background: radial-gradient(circle, #ffffff 15%, #ffcc00 50%, #ff3300 90%);
+    border-radius: 50% 50% 20% 20%;
+    box-shadow: 0 0 8px #ff9900, 0 0 12px #ffcc00;
+    animation: flicker 0.15s infinite alternate ease-in-out;
+    transform-origin: center bottom;
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 @keyframes flicker {
-    0% { transform: scale(1); opacity: 0.9; }
-    100% { transform: scale(1.2); opacity: 1; }
+    0% { transform: scale(1) rotate(-2deg); opacity: 0.85; }
+    100% { transform: scale(1.25) rotate(2deg); opacity: 1; }
 }
 
-/* Modal Popup */
+.candle-flame.extinguished {
+    opacity: 0 !important;
+    transform: scale(0) !important;
+}
+
+/* Smoke Effect */
+.smoke-container {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 40%;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.smoke-container.active {
+    animation: smokeRise 1.8s ease-out forwards;
+}
+
+.smoke-puff {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: rgba(200, 200, 200, 0.6);
+    border-radius: 50%;
+    filter: blur(3px);
+}
+
+.smoke-puff:nth-child(1) { left: 30%; animation: puff 1.5s infinite; }
+.smoke-puff:nth-child(2) { left: 50%; animation: puff 1.8s infinite 0.2s; }
+.smoke-puff:nth-child(3) { left: 70%; animation: puff 1.4s infinite 0.4s; }
+
+@keyframes smokeRise {
+    0% { opacity: 0.9; transform: translate(-50%, 0) scale(0.8); }
+    100% { opacity: 0; transform: translate(-50%, -35px) scale(2); }
+}
+
+@keyframes puff {
+    0% { transform: translateY(0) scale(1); opacity: 0.7; }
+    100% { transform: translateY(-20px) scale(1.8); opacity: 0; }
+}
+
+/* Floating Balloons */
+.interactive.balloon {
+    position: absolute;
+    width: 42px;
+    height: 56px;
+    background: url('assets/balloon.png') no-repeat center center / contain;
+    cursor: pointer;
+    z-index: 6;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
+}
+
+.float-1 { animation: floatAnim 3.5s ease-in-out infinite alternate; }
+.float-2 { animation: floatAnim 4.2s ease-in-out infinite alternate-reverse; }
+.float-3 { animation: floatAnim 3.8s ease-in-out infinite alternate; }
+
+@keyframes floatAnim {
+    0% { transform: translateY(0px) rotate(-3deg); }
+    100% { transform: translateY(-14px) rotate(4deg); }
+}
+
+.balloon.popping {
+    animation: popEffect 0.25s forwards ease-out !important;
+}
+
+@keyframes popEffect {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.8; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+/* Gift Boxes Container Grid */
+.gift-grid {
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 7;
+    gap: 4px;
+}
+
+.gift-box {
+    background: #5a1827;
+    border: 2px solid #d4a017;
+    border-radius: 4px;
+    padding: 6px 4px;
+    cursor: pointer;
+    flex: 1;
+    max-width: 85px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    transition: transform 0.2s, background-color 0.3s, border-color 0.3s;
+    user-select: none;
+}
+
+.gift-box:hover {
+    transform: translateY(-4px) scale(1.05);
+    background-color: #782134;
+}
+
+.gift-lid {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.gift-label {
+    font-size: 7px;
+    color: #f7e2a9;
+    margin-top: 3px;
+}
+
+.gift-box.opened {
+    background: #2a4d2e;
+    border-color: #5cd670;
+}
+
+.gift-box.opened .gift-lid {
+    transform: translateY(-6px) rotate(-12deg);
+}
+
+/* Wish Modal */
 .modal {
     display: flex;
     position: fixed;
-    z-index: 10;
+    z-index: 100;
     left: 0; top: 0;
     width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.82);
     justify-content: center;
     align-items: center;
+    padding: 15px;
 }
 
 .modal.hidden {
@@ -121,28 +279,37 @@ header h1 {
 .pixel-frame {
     background-color: #2b1405;
     border: 4px solid #d4a017;
-    padding: 25px;
-    width: 380px;
+    padding: 22px;
+    width: 100%;
+    max-width: 420px;
     text-align: center;
     color: #eeddbb;
     position: relative;
-    box-shadow: 0 0 15px rgba(212, 160, 23, 0.5);
+    box-shadow: 0 0 20px rgba(212, 160, 23, 0.6);
+    animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 .modal-content h2 {
     font-size: 11px;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
     color: #d4a017;
+    line-height: 1.4;
 }
 
 .modal-content p {
     font-size: 9px;
     line-height: 1.8;
+    color: #f7e2a9;
 }
 
 .close {
     position: absolute;
-    top: 8px; right: 12px;
+    top: 6px; right: 10px;
     color: #aaa;
     font-size: 18px;
     cursor: pointer;
@@ -153,7 +320,23 @@ header h1 {
 }
 
 footer {
-    margin-top: 15px;
+    margin-top: 12px;
     font-size: 8px;
     color: #8f6a45;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    header h1 { font-size: 12px; }
+    .pixel-button { font-size: 8px; padding: 8px 12px; }
+    .gift-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        bottom: 2%;
+    }
+    .gift-box { max-width: none; }
+    .gift-lid { font-size: 14px; }
+    .gift-label { font-size: 6px; }
+    .interactive.balloon { width: 32px; height: 44px; }
 }
