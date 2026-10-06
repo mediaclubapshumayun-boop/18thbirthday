@@ -84,15 +84,15 @@ header h1 {
     image-rendering: pixelated;
 }
 
-/* Cake Shifted Up & Bigger Size */
+/* Cake Position & Much Bigger Size */
 .cake-wrapper {
     position: absolute;
     top: 48.5%;
     left: 50.5%;
     transform: translate(-50%, -50%);
-    width: 24%; /* Increased cake size */
-    max-width: 200px;
-    min-width: 120px;
+    width: 32%; /* Bada Cake Size */
+    max-width: 270px;
+    min-width: 150px;
     z-index: 5;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -122,8 +122,8 @@ header h1 {
 
 .candle-flame {
     position: absolute;
-    width: 7px;
-    height: 12px;
+    width: 8px;
+    height: 14px;
     background: radial-gradient(circle, #ffffff 15%, #ffcc00 50%, #ff3300 90%);
     border-radius: 50% 50% 20% 20%;
     box-shadow: 0 0 6px #ff9900, 0 0 10px #ffcc00;
@@ -160,8 +160,8 @@ header h1 {
 
 .smoke-puff {
     position: absolute;
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     background: rgba(200, 200, 200, 0.6);
     border-radius: 50%;
     filter: blur(3px);
@@ -181,10 +181,10 @@ header h1 {
     100% { transform: translateY(-20px) scale(1.8); opacity: 0; }
 }
 
-/* Bigger Balloon Image Styling */
+/* Much Bigger Balloon Image Styling */
 .interactive.balloon {
     position: absolute;
-    width: 68px; /* Increased balloon size */
+    width: 95px; /* Bada Balloon Size */
     height: auto;
     cursor: pointer;
     z-index: 6;
@@ -217,7 +217,7 @@ header h1 {
     100% { transform: scale(0); opacity: 0; }
 }
 
-/* BIGGER STACKED GIFT BOXES (RIGHT CORNER PILE) */
+/* Stacked Gift Boxes (Right Corner Pile) */
 .gift-stack-corner {
     position: absolute;
     bottom: 4%;
@@ -334,5 +334,5 @@ footer {
     .pixel-button { font-size: 8px; padding: 8px 12px; }
     .gift-stack-corner { width: 150px; height: 100px; right: 2%; bottom: 2%; }
     .gift-icon { width: 50px; }
-    .interactive.balloon { width: 44px; }
+    .interactive.balloon { width: 55px; }
 }
