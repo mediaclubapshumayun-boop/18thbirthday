@@ -84,13 +84,13 @@ header h1 {
     image-rendering: pixelated;
 }
 
-/* Slightly Bigger Cake Size */
+/* Prominent Cake Size */
 .cake-wrapper {
     position: absolute;
     top: 48.5%;
     left: 50.5%;
     transform: translate(-50%, -50%);
-    width: 25%; /* Increased for ideal prominent look */
+    width: 25%;
     max-width: 205px;
     min-width: 125px;
     z-index: 5;
@@ -181,10 +181,10 @@ header h1 {
     100% { transform: translateY(-20px) scale(1.8); opacity: 0; }
 }
 
-/* Balanced Balloon Size & Positioning */
+/* Bigger Balloons */
 .interactive.balloon {
     position: absolute;
-    width: 60px;
+    width: 75px;
     height: auto;
     cursor: pointer;
     z-index: 6;
@@ -334,5 +334,5 @@ footer {
     .pixel-button { font-size: 8px; padding: 8px 12px; }
     .gift-stack-corner { width: 150px; height: 100px; right: 2%; bottom: 2%; }
     .gift-icon { width: 50px; }
-    .interactive.balloon { width: 40px; }
+    .interactive.balloon { width: 48px; }
 }
