@@ -81,31 +81,33 @@ header h1 {
     height: 100%;
     object-fit: cover;
     z-index: 1;
+    image-rendering: pixelated;
 }
 
-/* Cake Positioning & Scaling */
+/* Fix: Cake Positioned properly on Table */
 .cake-wrapper {
     position: absolute;
-    top: 42%;
+    top: 50%; /* Adjust according to table height in background image */
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 24%;
-    max-width: 200px;
-    min-width: 110px;
+    transform: translate(-50%, -20%);
+    width: 22%;
+    max-width: 180px;
+    min-width: 100px;
     z-index: 5;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
 
 .cake-wrapper:hover {
-    transform: translate(-50%, -44%) scale(1.02);
+    transform: translate(-50%, -22%) scale(1.03);
 }
 
 .cake-image {
     width: 100%;
     height: auto;
     display: block;
-    filter: drop-shadow(0px 8px 12px rgba(0, 0, 0, 0.6));
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.7));
+    image-rendering: pixelated;
 }
 
 /* Candle Flames */
@@ -120,19 +122,18 @@ header h1 {
 
 .candle-flame {
     position: absolute;
-    width: 7px;
-    height: 11px;
-    background: radial-gradient(circle, #ffffff 15%, #ffcc00 50%, #ff3300 90%);
-    border-radius: 50% 50% 20% 20%;
-    box-shadow: 0 0 8px #ff9900, 0 0 12px #ffcc00;
+    width: 6px;
+    height: 10px;
+    background: #ffcc00;
+    box-shadow: 0 0 6px #ff9900, inset 0 0 2px #ffffff;
     animation: flicker 0.15s infinite alternate ease-in-out;
     transform-origin: center bottom;
     transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 @keyframes flicker {
-    0% { transform: scale(1) rotate(-2deg); opacity: 0.85; }
-    100% { transform: scale(1.25) rotate(2deg); opacity: 1; }
+    0% { transform: scale(1); opacity: 0.85; }
+    100% { transform: scale(1.2) rotate(2deg); opacity: 1; }
 }
 
 .candle-flame.extinguished {
@@ -158,11 +159,10 @@ header h1 {
 
 .smoke-puff {
     position: absolute;
-    width: 12px;
-    height: 12px;
-    background: rgba(200, 200, 200, 0.6);
-    border-radius: 50%;
-    filter: blur(3px);
+    width: 10px;
+    height: 10px;
+    background: rgba(200, 200, 200, 0.7);
+    border-radius: 0;
 }
 
 .smoke-puff:nth-child(1) { left: 30%; animation: puff 1.5s infinite; }
@@ -179,26 +179,28 @@ header h1 {
     100% { transform: translateY(-20px) scale(1.8); opacity: 0; }
 }
 
-/* PURE CSS BALLOONS (Red Pixel Art Balloons) */
-.interactive.balloon {
+/* Fix: PIXEL ART BALLOONS (Sharp pixel edges) */
+.pixel-balloon {
     position: absolute;
-    width: 32px;
-    height: 50px;
+    width: 28px;
+    height: 45px;
     cursor: pointer;
     z-index: 6;
-    transition: transform 0.2s ease, opacity 0.3s ease;
 }
 
-.balloon-body {
-    width: 30px;
-    height: 36px;
-    background: #d62828;
-    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+.pixel-balloon .balloon-body {
+    width: 28px;
+    height: 32px;
+    background-color: #d62828;
     position: relative;
-    box-shadow: inset -4px -4px 0px rgba(0,0,0,0.25), inset 4px 4px 0px rgba(255,255,255,0.4);
+    /* Blocky Pixel Box Shadow Look */
+    box-shadow: 
+        inset -4px -4px 0px #8b0000, 
+        inset 4px 4px 0px #ff6b6b,
+        0 0 0 2px #000;
 }
 
-.balloon-body::after {
+.pixel-balloon .balloon-body::after {
     content: '';
     position: absolute;
     bottom: -4px;
@@ -206,18 +208,19 @@ header h1 {
     transform: translateX(-50%);
     width: 6px;
     height: 4px;
-    background: #a31c1c;
-    border-radius: 2px;
+    background: #8b0000;
+    border: 1px solid #000;
 }
 
-.balloon-string {
+.pixel-balloon .balloon-string {
     position: absolute;
-    bottom: -10px;
+    bottom: -12px;
     left: 50%;
     width: 2px;
-    height: 16px;
-    background: rgba(255, 255, 255, 0.6);
+    height: 14px;
+    background: #ffffff;
     transform: translateX(-50%);
+    box-shadow: 1px 0 0 #000;
 }
 
 .float-1 { animation: floatAnim 3.5s ease-in-out infinite alternate; }
@@ -225,8 +228,8 @@ header h1 {
 .float-3 { animation: floatAnim 3.8s ease-in-out infinite alternate; }
 
 @keyframes floatAnim {
-    0% { transform: translateY(0px) rotate(-3deg); }
-    100% { transform: translateY(-14px) rotate(4deg); }
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-12px); }
 }
 
 .balloon.popping {
@@ -235,20 +238,21 @@ header h1 {
 
 @keyframes popEffect {
     0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.5); opacity: 0.8; }
+    50% { transform: scale(1.4); opacity: 0.8; }
     100% { transform: scale(0); opacity: 0; }
 }
 
-/* FLOOR GIFT ROW (Matched with screenshot overlay style) */
-.gift-row-container {
+/* Fix: RIGHT CORNER GIFT BOXES GROUP */
+.right-corner-gifts {
     position: absolute;
-    bottom: 2%;
-    left: 0;
-    width: 100%;
+    bottom: 12px;
+    right: 15px;
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 180px;
+    justify-content: flex-end;
     align-items: flex-end;
-    padding: 0 20px;
+    gap: 6px;
     z-index: 10;
 }
 
@@ -268,13 +272,14 @@ header h1 {
 .gift-icon {
     width: 32px;
     height: auto;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+    image-rendering: pixelated;
 }
 
 .gift-tag {
     font-size: 7px;
     color: #e5c188;
-    margin-top: 4px;
+    margin-top: 2px;
     text-shadow: 1px 1px 2px #000;
 }
 
@@ -358,5 +363,6 @@ footer {
     .pixel-button { font-size: 8px; padding: 8px 12px; }
     .gift-icon { width: 22px; }
     .gift-tag { font-size: 5px; }
-    .interactive.balloon { width: 24px; height: 38px; }
+    .right-corner-gifts { width: 120px; right: 8px; bottom: 8px; }
+    .pixel-balloon { width: 20px; height: 32px; }
 }
