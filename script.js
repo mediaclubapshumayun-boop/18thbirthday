@@ -8,7 +8,171 @@ document.addEventListener('DOMContentLoaded', () => {
     const wishModal = document.getElementById('wishModal');
     const wishText = document.getElementById('wishText');
     const closeModal = document.getElementById('closeModal');
+    const giftItems = document.querySelectorAll('.gift-item');document.addEventListener('DOMContentLoaded', () => {
+    const candles = document.querySelectorAll('.candle-flame');
+    const cakeContainer = document.getElementById('cakeContainer');
+    const smokeEffect = document.getElementById('smokeEffect');
+    const micBtn = document.getElementById('micBtn');
+    const micStatus = document.getElementById('micStatus');
+    
+    const wishModal = document.getElementById('wishModal');
+    const wishText = document.getElementById('wishText');
+    const closeModal = document.getElementById('closeModal');
     const giftItems = document.querySelectorAll('.gift-item');
+    const balloons = document.querySelectorAll('.balloon');
+
+    // Background Audio Elements & Controls
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggleBtn = document.getElementById('musicToggleBtn');
+    let isMusicPlaying = false;
+
+    // Create a Web Audio API synthesizer for the balloon pop sound effect
+    function playPopSound() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.type = 'sine';
+            // Start high and drop quickly for a pop sound
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.1);
+
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        } catch (e) {
+            console.log("AudioContext not supported or blocked", e);
+        }
+    }
+
+    function playAudio() {
+        bgMusic.play().then(() => {
+            isMusicPlaying = true;
+            musicToggleBtn.textContent = "🎵 Music: ON";
+            console.log("Audio playing successfully!");
+        }).catch(err => {
+            console.log("Autoplay prevented by browser, waiting for user interaction:", err);
+        });
+    }
+
+    // Try playing immediately on load
+    bgMusic.volume = 0.5;
+    playAudio();
+
+    musicToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isMusicPlaying) {
+            bgMusic.pause();
+            isMusicPlaying = false;
+            musicToggleBtn.textContent = "🎵 Music: OFF";
+        } else {
+            playAudio();
+        }
+    });
+
+    // Fallback: Start music on the very first click anywhere if browser blocked initial autoplay
+    document.addEventListener('click', () => {
+        if (!isMusicPlaying) {
+            playAudio();
+        }
+    }, { once: true });
+
+    let candlesBlown = false;
+
+    // Extinguish Candles Function
+    function blowOutCandles() {
+        if (candlesBlown) return;
+        
+        candles.forEach(candle => candle.classList.add('extinguished'));
+        smokeEffect.classList.add('active');
+        candlesBlown = true;
+        micStatus.textContent = "🎉 Candles blown out! Happy 18th Birthday Zash!";
+    }
+
+    // Manual Click on Cake
+    cakeContainer.addEventListener('click', blowOutCandles);
+
+    // Microphone Detection Logic
+    micBtn.addEventListener('click', async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const analyser = audioContext.createAnalyser();
+            const microphone = audioContext.createMediaStreamSource(stream);
+            
+            analyser.fftSize = 256;
+            microphone.connect(analyser);
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            micStatus.textContent = "🎙 Listening... Blow loudly into your mic!";
+            micBtn.style.backgroundColor = "#2e7d32";
+
+            function checkBlow() {
+                if (candlesBlown) return;
+
+                analyser.getByteFrequencyData(dataArray);
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    sum += dataArray[i];
+                }
+                let average = sum / bufferLength;
+
+                if (average > 45) {
+                    blowOutCandles();
+                } else {
+                    requestAnimationFrame(checkBlow);
+                }
+            }
+
+            checkBlow();
+        } catch (err) {
+            micStatus.textContent = "⚠️ Mic access denied. Click the cake instead!";
+            console.error('Mic Error:', err);
+        }
+    });
+
+    // Pop Balloons with Sound Effect
+    balloons.forEach(balloon => {
+        balloon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playPopSound(); // Trigger the pop sound effect
+            balloon.classList.add('popping');
+            setTimeout(() => {
+                balloon.style.display = 'none';
+            }, 200);
+        });
+    });
+
+    // Open Gift Boxes for Wishes
+    giftItems.forEach(gift => {
+        gift.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wish = gift.getAttribute('data-wish');
+            wishText.textContent = wish;
+            wishModal.classList.remove('hidden');
+            gift.classList.add('opened');
+        });
+    });
+
+    // Close Wish Modal
+    closeModal.addEventListener('click', () => {
+        wishModal.classList.add('hidden');
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === wishModal) {
+            wishModal.classList.add('hidden');
+        }
+    });
+});
     const balloons = document.querySelectorAll('.balloon');
 
     // Music & Overlay Elements
