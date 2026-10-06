@@ -1,98 +1,122 @@
 * {
-    box-sizing: border-box;
-    margin: 0; padding: 0;
-    user-select: none;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-body, html {
-    width: 100%; height: 100%;
-    background-color: #120b06;
-    font-family: 'Press Start 2P', monospace;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    overflow: hidden; color: #fff;
+body {
+  background-color: #0c0814;
+  color: #eed6ab;
+  font-family: 'Press Start 2P', monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-#outer-frame {
-    position: relative; z-index: 2;
-    background: #d8a272; border: 6px solid #5a3821;
-    padding: 10px 14px; border-radius: 4px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    text-align: center; width: 680px; max-width: 96vw;
+.wrapper {
+  text-align: center;
+  padding: 15px;
 }
 
-.top-subtitle, .mid-subtitle, .bottom-subtitle {
-    color: #3d2314; font-size: 8px; margin: 3px 0; letter-spacing: 0.5px;
-}
-.bottom-subtitle { font-size: 11px; font-weight: bold; letter-spacing: 1.5px; }
-
-#game-viewport {
-    position: relative; width: 100%; height: 380px;
-    border: 3px solid #3d2314; background: #c2c2c2; overflow: hidden;
+.header-banner h1 {
+  font-size: 16px;
+  color: #ffd700;
+  text-shadow: 3px 3px #5c0d18;
+  margin-bottom: 12px;
 }
 
-#room-canvas { width: 100%; height: 100%; display: block; cursor: pointer; }
-
-.leave-gift-btn {
-    position: absolute; bottom: 8px; right: 8px; z-index: 10;
-}
-.mode-btn {
-    position: absolute; top: 8px; left: 8px; z-index: 10; font-size: 6px;
-}
-
-.mic-status {
-    margin-top: 8px; color: #d8a272; font-size: 8px;
-    background: #2a160a; padding: 6px 14px; border: 2px solid #5a3821; border-radius: 4px;
-}
-
-.pixel-modal {
-    position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
-    display: flex; justify-content: center; align-items: center; z-index: 100;
-}
-.pixel-modal.hidden { display: none; }
-
-.present-card-container, .wrapping-station-box {
-    background: #f4e1d2; border: 4px solid #5a3821;
-    width: 90%; max-width: 440px; padding: 14px; color: #2d1a0e;
-}
-
-.card-header-pink {
-    background: #800020; color: #f4e1d2; border: 2px solid #5a3821;
-    text-align: center; padding: 6px; margin-bottom: 10px; position: relative;
-}
-.header-sub { font-size: 7px; color: #d8a272; }
-.card-header-pink h2 { font-size: 12px; margin-top: 2px; }
-.close-card-x { position: absolute; top: 4px; right: 8px; background: none; border: none; font-size: 14px; color: #fff; cursor: pointer; }
-
-.card-content-split { display: flex; gap: 10px; margin-bottom: 12px; }
-.letter-box, .photo-box {
-    flex: 1; border: 2px solid #b5835a; background: #fffdf9;
-    padding: 8px; position: relative; min-height: 140px;
-}
-
-.tab-label {
-    position: absolute; top: -9px; left: 6px; background: #5a3821;
-    color: #fff; font-size: 6px; padding: 2px 4px;
-}
-
-.letter-box p {
-    font-family: 'VT323', monospace; font-size: 18px; color: #3d2314; margin-top: 6px;
-}
-
-.polaroid-frame { background: #fff; border: 1px solid #ccc; padding: 3px; margin-top: 6px; }
-.polaroid-frame img { width: 100%; height: 100px; object-fit: cover; }
-
-.present-form-inputs input, .present-form-inputs textarea {
-    width: 100%; font-family: 'VT323', monospace; font-size: 16px;
-    padding: 6px; margin-bottom: 8px; border: 2px solid #b5835a; outline: none;
+.mic-status-container {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
 }
 
 .pixel-btn {
-    font-family: 'Press Start 2P', monospace; font-size: 7px;
-    color: #fff; background: #5a3821; border: 2px solid #2d1a0e;
-    padding: 7px 10px; cursor: pointer; box-shadow: 0 2px 0 #000;
+  background-color: #8c1111;
+  color: #ffffff;
+  border: 3px solid #ffd700;
+  padding: 8px 14px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px #000;
 }
-.pixel-btn:active { transform: translateY(1px); }
-.highlight-btn { background: #800020; }
+
+.pixel-btn:hover {
+  background-color: #a81515;
+}
+
+#micStatusText {
+  font-size: 9px;
+  color: #bfa373;
+}
+
+.room-container {
+  border: 6px solid #4a250e;
+  border-radius: 4px;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.2), 0 0 10px #000;
+  display: inline-block;
+  background-color: #000;
+}
+
+canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: pointer;
+}
+
+/* Modal Popup */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #2b1405;
+  border: 4px solid #ffd700;
+  padding: 25px;
+  max-width: 400px;
+  color: #eed6ab;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 15px #ffd700;
+}
+
+.modal-content h2 {
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #ffd700;
+}
+
+.modal-content p {
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px; right: 12px;
+  font-size: 18px;
+  color: #ffd700;
+  cursor: pointer;
+}
+
+.footer-note {
+  margin-top: 12px;
+  font-size: 9px;
+  color: #bfa373;
+}
