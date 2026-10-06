@@ -15,14 +15,31 @@
 
         <div class="controls">
             <button id="micBtn" class="pixel-button">🎤 Enable Mic to Blow Candles</button>
-            <p id="micStatus" class="mic-status">Mic not enabled.</p>
+            <p id="micStatus" class="mic-status">Click button to enable mic</p>
         </div>
 
+        <!-- Main Scene Container using your Image -->
         <div class="scene-container">
-            <canvas id="birthdayCanvas" width="800" height="500"></canvas>
+            <img src="bg.jpg" alt="Harry Potter Birthday Room" id="bgImage">
+            
+            <!-- Flame Overlays (Will hide when blown) -->
+            <div class="candle-flame" style="top: 36%; left: 47%;"></div>
+            <div class="candle-flame" style="top: 36%; left: 49%;"></div>
+            <div class="candle-flame" style="top: 36%; left: 51%;"></div>
+
+            <!-- Clickable Interactive Areas -->
+            <div class="interactive balloon" id="balloon1" style="top: 17%; left: 26%;" data-name="Purple Balloon"></div>
+            <div class="interactive balloon" id="balloon2" style="top: 25%; left: 29%;" data-name="Yellow Balloon"></div>
+            <div class="interactive balloon" id="balloon3" style="top: 19%; left: 67%;" data-name="Purple Balloon"></div>
+            <div class="interactive balloon" id="balloon4" style="top: 25%; left: 70%;" data-name="Red Heart Balloon"></div>
+            <div class="interactive balloon" id="balloon5" style="top: 32%; left: 75%;" data-name="Green Balloon"></div>
+
+            <div class="interactive gift" id="gift1" style="top: 63%; left: 20%;" data-wish="✨ May your 28th year be filled with pure magic, joy, and endless spells of victory!"></div>
+            <div class="interactive gift" id="gift2" style="top: 42%; left: 34%;" data-wish="🦉 A special Hogwarts owl brought this: Have a fantastic and happy Birthday Zash!"></div>
+            <div class="interactive gift" id="gift3" style="top: 60%; left: 75%;" data-wish="⚡ Accio happiness! May all your dreams and magical ambitions come true this year!"></div>
         </div>
 
-        <!-- Gift Wish Modal -->
+        <!-- Wish Modal -->
         <div id="wishModal" class="modal hidden">
             <div class="modal-content pixel-frame">
                 <span id="closeModal" class="close">&times;</span>
