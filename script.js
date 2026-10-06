@@ -11,38 +11,88 @@ document.addEventListener('DOMContentLoaded', () => {
     const giftItems = document.querySelectorAll('.gift-item');
     const balloons = document.querySelectorAll('.balloon');
 
-    // Music Elements
+    // Music & Overlay Elements
     const bgMusic = document.getElementById('bgMusic');
     const musicToggleBtn = document.getElementById('musicToggleBtn');
+    const startOverlay = document.getElementById('startOverlay'); // Agar aapne HTML mein overlay lagaya hai
+    const startBtn = document.getElementById('startBtn');         // Celebration start button
     let isMusicPlaying = false;
 
-    // Function to Start Audio
-    function playAudio() {
-        if (!isMusicPlaying) {
-            bgMusic.play().then(() => {
-                isMusicPlaying = true;
-                musicToggleBtn.textContent = "🎵 Music: ON";
-            }).catch(err => {
-                console.log("Autoplay blocked, waiting for user click.", err);
-            });
+    // Function to Play Balloon Pop Sound using Web Audio API (No external file needed)
+    function playPopSound() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            // Quick frequency drop for a realistic pop effect
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.08);
+            
+            gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
+        } catch (err) {
+            console.log("AudioContext error:", err);
         }
     }
 
-    // Toggle Music Button
-    musicToggleBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (isMusicPlaying) {
-            bgMusic.pause();
-            isMusicPlaying = false;
-            musicToggleBtn.textContent = "🎵 Music: OFF";
-        } else {
-            playAudio();
+    // Function to Start Audio & Hide Overlay
+    function startCelebration() {
+        if (bgMusic) {
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                if (musicToggleBtn) musicToggleBtn.textContent = "🎵 Music: ON";
+            }).catch(err => {
+                console.log("Autoplay blocked:", err);
+            });
         }
-    });
+        
+        // Hide overlay if it exists in HTML
+        if (startOverlay) {
+            startOverlay.style.opacity = '0';
+            setTimeout(() => {
+                startOverlay.style.display = 'none';
+            }, 500);
+        }
+    }
 
-    // Auto-play music on first interaction anywhere on page
+    // Start Button Listener (if present)
+    if (startBtn) {
+        startBtn.addEventListener('click', startCelebration);
+    }
+
+    // Toggle Music Button
+    if (musicToggleBtn) {
+        musicToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+                musicToggleBtn.textContent = "🎵 Music: OFF";
+            } else {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    musicToggleBtn.textContent = "🎵 Music: ON";
+                });
+            }
+        });
+    }
+
+    // Fallback: First click anywhere starts audio if no overlay clicked
     document.body.addEventListener('click', () => {
-        playAudio();
+        if (!isMusicPlaying && bgMusic) {
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                if (musicToggleBtn) musicToggleBtn.textContent = "🎵 Music: ON";
+            }).catch(() => {});
+        }
     }, { once: true });
 
     let candlesBlown = false;
@@ -52,58 +102,67 @@ document.addEventListener('DOMContentLoaded', () => {
         if (candlesBlown) return;
         
         candles.forEach(candle => candle.classList.add('extinguished'));
-        smokeEffect.classList.add('active');
+        if (smokeEffect) smokeEffect.classList.add('active');
         candlesBlown = true;
-        micStatus.textContent = "🎉 Candles blown out! Happy 18th Birthday Zash!";
+        
+        if (micStatus) {
+            micStatus.textContent = "🎉 Candles blown out! Happy 18th Birthday Zash!";
+        }
     }
 
     // Manual Click on Cake
-    cakeContainer.addEventListener('click', blowOutCandles);
+    if (cakeContainer) {
+        cakeContainer.addEventListener('click', blowOutCandles);
+    }
 
     // Microphone Detection Logic
-    micBtn.addEventListener('click', async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const analyser = audioContext.createAnalyser();
-            const microphone = audioContext.createMediaStreamSource(stream);
-            
-            analyser.fftSize = 256;
-            microphone.connect(analyser);
+    if (micBtn) {
+        micBtn.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const analyser = audioContext.createAnalyser();
+                const microphone = audioContext.createMediaStreamSource(stream);
+                
+                analyser.fftSize = 256;
+                microphone.connect(analyser);
 
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
 
-            micStatus.textContent = "🎙️ Listening... Blow loudly into your mic!";
-            micBtn.style.backgroundColor = "#2e7d32";
+                if (micStatus) micStatus.textContent = "🎙️ Listening... Blow loudly into your mic!";
+                micBtn.style.backgroundColor = "#2e7d32";
 
-            function checkBlow() {
-                if (candlesBlown) return;
+                function checkBlow() {
+                    if (candlesBlown) return;
 
-                analyser.getByteFrequencyData(dataArray);
-                let sum = 0;
-                for (let i = 0; i < bufferLength; i++) {
-                    sum += dataArray[i];
+                    analyser.getByteFrequencyData(dataArray);
+                    let sum = 0;
+                    for (let i = 0; i < bufferLength; i++) {
+                        sum += dataArray[i];
+                    }
+                    let average = sum / bufferLength;
+
+                    if (average > 40) {
+                        blowOutCandles();
+                        stream.getTracks().forEach(track => track.stop());
+                    } else {
+                        requestAnimationFrame(checkBlow);
+                    }
                 }
-                let average = sum / bufferLength;
 
-                if (average > 45) {
-                    blowOutCandles();
-                } else {
-                    requestAnimationFrame(checkBlow);
-                }
+                checkBlow();
+            } catch (err) {
+                if (micStatus) micStatus.textContent = "⚠️ Mic access denied. Click the cake instead!";
+                console.error('Mic Error:', err);
             }
+        });
+    }
 
-            checkBlow();
-        } catch (err) {
-            micStatus.textContent = "⚠️ Mic access denied. Click the cake instead!";
-            console.error('Mic Error:', err);
-        }
-    });
-
-    // Pop Balloons
+    // Pop Balloons with Built-in Pop Sound
     balloons.forEach(balloon => {
         balloon.addEventListener('click', () => {
+            playPopSound(); // Play synthesized pop sound immediately
             balloon.classList.add('popping');
             setTimeout(() => {
                 balloon.style.display = 'none';
@@ -115,16 +174,18 @@ document.addEventListener('DOMContentLoaded', () => {
     giftItems.forEach(gift => {
         gift.addEventListener('click', () => {
             const wish = gift.getAttribute('data-wish');
-            wishText.textContent = wish;
-            wishModal.classList.remove('hidden');
+            if (wishText) wishText.textContent = wish;
+            if (wishModal) wishModal.classList.remove('hidden');
             gift.classList.add('opened');
         });
     });
 
     // Close Wish Modal
-    closeModal.addEventListener('click', () => {
-        wishModal.classList.add('hidden');
-    });
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            if (wishModal) wishModal.classList.add('hidden');
+        });
+    }
 
     window.addEventListener('click', (e) => {
         if (e.target === wishModal) {
