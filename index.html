@@ -8,6 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Background Audio Element -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="bg-music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <div class="main-wrapper">
         <header>
             <h1>ZASH'S 18TH BIRTHDAY FEAST!</h1>
@@ -15,7 +21,8 @@
 
         <div class="controls">
             <button id="micBtn" class="pixel-button">🎤 Enable Mic to Blow Candles</button>
-            <p id="micStatus" class="mic-status">Click button to enable mic or tap the cake directly!</p>
+            <button id="musicToggleBtn" class="pixel-button">🎵 Music: OFF</button>
+            <p id="micStatus" class="mic-status">Click anywhere or button to start background music!</p>
         </div>
 
         <!-- Main Scene Container -->
