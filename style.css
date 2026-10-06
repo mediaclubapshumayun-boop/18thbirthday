@@ -67,7 +67,6 @@ canvas {
     cursor: pointer;
 }
 
-/* Modal Styling */
 .modal {
     display: flex;
     position: fixed;
