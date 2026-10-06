@@ -111,7 +111,7 @@ function detectBlow() {
 
 document.getElementById('micBtn').addEventListener('click', initMicrophone);
 
-// Fallback direct cake tap interaction
+// Direct cake tap interaction
 document.getElementById('cakeContainer').addEventListener('click', () => {
     if (candlesLit) {
         extinguishCandles();
