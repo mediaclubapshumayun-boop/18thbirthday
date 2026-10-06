@@ -84,15 +84,15 @@ header h1 {
     image-rendering: pixelated;
 }
 
-/* Cake Shifted Up on the Center Table */
+/* Cake Shifted Up & Bigger Size */
 .cake-wrapper {
     position: absolute;
-    top: 48.5%; /* Shifted higher up onto table top */
+    top: 48.5%;
     left: 50.5%;
     transform: translate(-50%, -50%);
-    width: 19%;
-    max-width: 160px;
-    min-width: 95px;
+    width: 24%; /* Increased cake size */
+    max-width: 200px;
+    min-width: 120px;
     z-index: 5;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -122,8 +122,8 @@ header h1 {
 
 .candle-flame {
     position: absolute;
-    width: 6px;
-    height: 10px;
+    width: 7px;
+    height: 12px;
     background: radial-gradient(circle, #ffffff 15%, #ffcc00 50%, #ff3300 90%);
     border-radius: 50% 50% 20% 20%;
     box-shadow: 0 0 6px #ff9900, 0 0 10px #ffcc00;
@@ -181,10 +181,10 @@ header h1 {
     100% { transform: translateY(-20px) scale(1.8); opacity: 0; }
 }
 
-/* Balloon Image Styling */
+/* Bigger Balloon Image Styling */
 .interactive.balloon {
     position: absolute;
-    width: 48px;
+    width: 68px; /* Increased balloon size */
     height: auto;
     cursor: pointer;
     z-index: 6;
@@ -239,14 +239,14 @@ header h1 {
 }
 
 .gift-icon {
-    width: 82px; /* Bigger gift boxes */
+    width: 82px;
     height: auto;
     display: block;
     image-rendering: pixelated;
     filter: drop-shadow(2px 5px 8px rgba(0, 0, 0, 0.8));
 }
 
-/* Overlapping Stack Positioning (Tightly Clustered) */
+/* Overlapping Stack Positioning */
 .gift-p1 { bottom: 0px; right: 0px; z-index: 5; }
 .gift-p2 { bottom: 0px; right: 48px; z-index: 4; }
 .gift-p3 { bottom: 0px; right: 96px; z-index: 3; }
@@ -334,5 +334,5 @@ footer {
     .pixel-button { font-size: 8px; padding: 8px 12px; }
     .gift-stack-corner { width: 150px; height: 100px; right: 2%; bottom: 2%; }
     .gift-icon { width: 50px; }
-    .interactive.balloon { width: 32px; }
+    .interactive.balloon { width: 44px; }
 }
